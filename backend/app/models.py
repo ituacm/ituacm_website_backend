@@ -1,5 +1,6 @@
 import uuid
 
+from datetime import datetime
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -43,7 +44,6 @@ class UpdatePassword(SQLModel):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -56,40 +56,57 @@ class UsersPublic(SQLModel):
     count: int
 
 
-# Shared properties
-class ItemBase(SQLModel):
-    title: str = Field(min_length=1, max_length=255)
-    description: str | None = Field(default=None, max_length=255)
+class PostBase(SQLModel):
+    title: str
+    description: str | None = Field(default=None)
+    content: str | None = Field(default=None)
+    image: str | None = Field(default=None)
+    is_visible: bool | None = Field(default=True)
 
-
-# Properties to receive on item creation
-class ItemCreate(ItemBase):
+class PostCreate(PostBase):
     pass
 
+class PostUpdate(PostBase):
+    pass
 
-# Properties to receive on item update
-class ItemUpdate(ItemBase):
-    title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
+class PostPublic(PostBase):
+    id: int
+
+class PostsPublic(SQLModel):
+    posts: list[PostPublic]
+    count: int
+
+class Post(PostBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    created_at: datetime
+    created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
+    last_updated: datetime = Field(default_factory=datetime.now)
+    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True)
+
+class EventBase(PostBase):
+    start: datetime
+    end: datetime
+    location: str
 
 
-# Database model, database table inferred from class name
-class Item(ItemBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    title: str = Field(max_length=255)
-    owner_id: uuid.UUID = Field(
-        foreign_key="user.id", nullable=False, ondelete="CASCADE"
-    )
-    owner: User | None = Relationship(back_populates="items")
+class EventCreate(EventBase):
+    pass
 
+class EventUpdate(EventBase):
+    pass
 
-# Properties to return via API, id is always required
-class ItemPublic(ItemBase):
-    id: uuid.UUID
-    owner_id: uuid.UUID
+class Event(EventBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.now)
+    created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
+    last_updated: datetime = Field(default_factory=datetime.now)
+    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True)
 
+class EventPublic(EventBase):
+    id: int
 
-class ItemsPublic(SQLModel):
-    data: list[ItemPublic]
+class EventsPublic(SQLModel):
+    events: list[EventPublic]
     count: int
 
 

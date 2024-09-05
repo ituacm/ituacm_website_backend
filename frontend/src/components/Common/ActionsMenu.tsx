@@ -9,20 +9,33 @@ import {
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { FiEdit, FiTrash } from "react-icons/fi"
 
-import type { ItemPublic, UserPublic } from "../../client"
+import type { PostPublic, EventPublic, UserPublic } from "../../client"
 import EditUser from "../Admin/EditUser"
-import EditItem from "../Items/EditItem"
+import EditPost from "../Posts/EditPost"
+import EditEvent from "../Events/EditEvent"
 import Delete from "./DeleteAlert"
 
 interface ActionsMenuProps {
   type: string
-  value: ItemPublic | UserPublic
+  value: PostPublic | EventPublic | UserPublic
   disabled?: boolean
 }
 
 const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
-  const editUserModal = useDisclosure()
-  const deleteModal = useDisclosure()
+  const editUserModal = useDisclosure();
+  const editPostModal = useDisclosure();
+  const editEventModal = useDisclosure();
+  const deleteModal = useDisclosure();
+
+  const handleEditOpen = () => {
+    if (type === "User") {
+      editUserModal.onOpen();
+    } else if (type === "Post") {
+      editPostModal.onOpen();
+    } else if (type === "Event") {
+      editEventModal.onOpen();
+    }
+  };
 
   return (
     <>
@@ -35,7 +48,7 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
         />
         <MenuList>
           <MenuItem
-            onClick={editUserModal.onOpen}
+            onClick={handleEditOpen}
             icon={<FiEdit fontSize="16px" />}
           >
             Edit {type}
@@ -48,28 +61,38 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
             Delete {type}
           </MenuItem>
         </MenuList>
-        {type === "User" ? (
+
+        {type === "User" && (
           <EditUser
             user={value as UserPublic}
             isOpen={editUserModal.isOpen}
             onClose={editUserModal.onClose}
           />
-        ) : (
-          <EditItem
-            item={value as ItemPublic}
-            isOpen={editUserModal.isOpen}
-            onClose={editUserModal.onClose}
+        )}
+        {type === "Post" && (
+          <EditPost
+            post={value as PostPublic}
+            isOpen={editPostModal.isOpen}
+            onClose={editPostModal.onClose}
           />
         )}
+        {type === "Event" && (
+          <EditEvent
+            event={value as EventPublic}
+            isOpen={editEventModal.isOpen}
+            onClose={editEventModal.onClose}
+          />
+        )}
+
         <Delete
           type={type}
-          id={value.id}
+          id={String(value.id)} // Convert id to string
           isOpen={deleteModal.isOpen}
           onClose={deleteModal.onClose}
         />
       </Menu>
     </>
-  )
+  );
 }
 
 export default ActionsMenu

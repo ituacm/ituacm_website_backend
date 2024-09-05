@@ -14,10 +14,16 @@ import type {
   UsersPublic,
   UserUpdate,
   UserUpdateMe,
-  ItemCreate,
-  ItemPublic,
-  ItemsPublic,
-  ItemUpdate,
+  Post,
+  PostCreate,
+  PostPublic,
+  PostsPublic,
+  PostUpdate,
+  Event,
+  EventCreate,
+  EventPublic,
+  EventsPublic,
+  EventUpdate,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -388,38 +394,38 @@ export class UtilsService {
   }
 }
 
-export type TDataReadItems = {
+export type TDataReadPosts = {
   limit?: number
   skip?: number
 }
-export type TDataCreateItem = {
-  requestBody: ItemCreate
+export type TDataCreatePost = {
+  requestBody: PostCreate
 }
-export type TDataReadItem = {
-  id: string
+export type TDataReadPost = {
+  id: number
 }
-export type TDataUpdateItem = {
-  id: string
-  requestBody: ItemUpdate
+export type TDataUpdatePost = {
+  id: number
+  requestBody: PostUpdate
 }
-export type TDataDeleteItem = {
-  id: string
+export type TDataDeletePost = {
+  id: number
 }
 
-export class ItemsService {
+export class PostsService {
   /**
-   * Read Items
-   * Retrieve items.
-   * @returns ItemsPublic Successful Response
+   * Read Posts
+   * Retrieve posts.
+   * @returns PostsPublic Successful Response
    * @throws ApiError
    */
-  public static readItems(
-    data: TDataReadItems = {},
-  ): CancelablePromise<ItemsPublic> {
+  public static readPosts(
+    data: TDataReadPosts = {},
+  ): CancelablePromise<PostsPublic> {
     const { limit = 100, skip = 0 } = data
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/",
+      url: "/api/v1/posts/",
       query: {
         skip,
         limit,
@@ -431,18 +437,16 @@ export class ItemsService {
   }
 
   /**
-   * Create Item
-   * Create new item.
-   * @returns ItemPublic Successful Response
+   * Create Post
+   * Create new post.
+   * @returns Post Successful Response
    * @throws ApiError
    */
-  public static createItem(
-    data: TDataCreateItem,
-  ): CancelablePromise<ItemPublic> {
+  public static createPost(data: TDataCreatePost): CancelablePromise<Post> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "POST",
-      url: "/api/v1/items/",
+      url: "/api/v1/posts/",
       body: requestBody,
       mediaType: "application/json",
       errors: {
@@ -452,16 +456,16 @@ export class ItemsService {
   }
 
   /**
-   * Read Item
-   * Get item by ID.
-   * @returns ItemPublic Successful Response
+   * Read Post
+   * Get post by ID.
+   * @returns PostPublic Successful Response
    * @throws ApiError
    */
-  public static readItem(data: TDataReadItem): CancelablePromise<ItemPublic> {
+  public static readPost(data: TDataReadPost): CancelablePromise<PostPublic> {
     const { id } = data
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/posts/{id}",
       path: {
         id,
       },
@@ -472,18 +476,16 @@ export class ItemsService {
   }
 
   /**
-   * Update Item
-   * Update an item.
-   * @returns ItemPublic Successful Response
+   * Update Post
+   * Update a post.
+   * @returns Post Successful Response
    * @throws ApiError
    */
-  public static updateItem(
-    data: TDataUpdateItem,
-  ): CancelablePromise<ItemPublic> {
+  public static updatePost(data: TDataUpdatePost): CancelablePromise<Post> {
     const { id, requestBody } = data
     return __request(OpenAPI, {
       method: "PUT",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/posts/{id}",
       path: {
         id,
       },
@@ -496,16 +498,144 @@ export class ItemsService {
   }
 
   /**
-   * Delete Item
-   * Delete an item.
+   * Delete Post
+   * Delete a post.
    * @returns Message Successful Response
    * @throws ApiError
    */
-  public static deleteItem(data: TDataDeleteItem): CancelablePromise<Message> {
+  public static deletePost(data: TDataDeletePost): CancelablePromise<Message> {
     const { id } = data
     return __request(OpenAPI, {
       method: "DELETE",
-      url: "/api/v1/items/{id}",
+      url: "/api/v1/posts/{id}",
+      path: {
+        id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+}
+
+export type TDataReadEvents = {
+  limit?: number
+  skip?: number
+}
+export type TDataCreateEvent = {
+  requestBody: EventCreate
+}
+export type TDataReadEvent = {
+  id: number
+}
+export type TDataUpdateEvent = {
+  id: number
+  requestBody: EventUpdate
+}
+export type TDataDeleteEvent = {
+  id: number
+}
+
+export class EventsService {
+  /**
+   * Read Events
+   * Retrieve events.
+   * @returns EventsPublic Successful Response
+   * @throws ApiError
+   */
+  public static readEvents(
+    data: TDataReadEvents = {},
+  ): CancelablePromise<EventsPublic> {
+    const { limit = 100, skip = 0 } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/events/",
+      query: {
+        skip,
+        limit,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Create Event
+   * Create new event.
+   * @returns Event Successful Response
+   * @throws ApiError
+   */
+  public static createEvent(data: TDataCreateEvent): CancelablePromise<Event> {
+    const { requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/events/",
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Read Event
+   * Get event by ID.
+   * @returns EventPublic Successful Response
+   * @throws ApiError
+   */
+  public static readEvent(
+    data: TDataReadEvent,
+  ): CancelablePromise<EventPublic> {
+    const { id } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/events/{id}",
+      path: {
+        id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Update Event
+   * Update an event.
+   * @returns Event Successful Response
+   * @throws ApiError
+   */
+  public static updateEvent(data: TDataUpdateEvent): CancelablePromise<Event> {
+    const { id, requestBody } = data
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/events/{id}",
+      path: {
+        id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Delete Event
+   * Delete an event.
+   * @returns Message Successful Response
+   * @throws ApiError
+   */
+  public static deleteEvent(
+    data: TDataDeleteEvent,
+  ): CancelablePromise<Message> {
+    const { id } = data
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/events/{id}",
       path: {
         id,
       },

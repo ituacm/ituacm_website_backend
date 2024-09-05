@@ -11,62 +11,59 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Switch,
 } from "@chakra-ui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import {
-  type ApiError,
-  type ItemPublic,
-  type ItemUpdate,
-  ItemsService,
-} from "../../client"
+import { type ApiError, type PostCreate, PostsService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
-interface EditItemProps {
-  item: ItemPublic
+interface AddPostProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
+const AddPost = ({ isOpen, onClose }: AddPostProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting, errors, isDirty },
-  } = useForm<ItemUpdate>({
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<PostCreate>({
     mode: "onBlur",
     criteriaMode: "all",
-    defaultValues: item,
+    defaultValues: {
+      title: "",
+      description: "",
+    },
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemUpdate) =>
-      ItemsService.updateItem({ id: item.id, requestBody: data }),
+    mutationFn: (data: PostCreate) =>
+      PostsService.createPost({ requestBody: data }),
     onSuccess: () => {
-      showToast("Success!", "Item updated successfully.", "success")
+      showToast("Success!", "Post created successfully.", "success")
+      reset()
       onClose()
     },
     onError: (err: ApiError) => {
       handleError(err, showToast)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
+      queryClient.invalidateQueries({ queryKey: ["posts"] })
     },
   })
 
-  const onSubmit: SubmitHandler<ItemUpdate> = async (data) => {
+  const onSubmit: SubmitHandler<PostCreate> = (data) => {
     mutation.mutate(data)
   }
 
-  const onCancel = () => {
-    reset()
-    onClose()
-  }
+  const isVisible = watch("is_visible") ?? true;
 
   return (
     <>
@@ -78,22 +75,26 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Item</ModalHeader>
+          <ModalHeader>Add Post</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isInvalid={!!errors.title}>
+            {/* Title */}
+            <FormControl isRequired isInvalid={!!errors.title}>
               <FormLabel htmlFor="title">Title</FormLabel>
               <Input
                 id="title"
                 {...register("title", {
-                  required: "Title is required",
+                  required: "Title is required.",
                 })}
+                placeholder="Title"
                 type="text"
               />
               {errors.title && (
                 <FormErrorMessage>{errors.title.message}</FormErrorMessage>
               )}
             </FormControl>
+
+            {/* Description */}
             <FormControl mt={4}>
               <FormLabel htmlFor="description">Description</FormLabel>
               <Input
@@ -103,22 +104,52 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
                 type="text"
               />
             </FormControl>
+
+            {/* Content */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="content">Content</FormLabel>
+              <Input
+                id="content"
+                {...register("content")}
+                placeholder="Content"
+                type="text"
+              />
+            </FormControl>
+
+            {/* Image */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="image">Image URL</FormLabel>
+              <Input
+                id="image"
+                {...register("image")}
+                placeholder="Image URL"
+                type="text"
+              />
+            </FormControl>
+
+
+            {/* Visibility */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="is_visible">Is Visible</FormLabel>
+              <Switch
+                id="is_visible"
+                {...register("is_visible")}
+                isChecked={isVisible}
+              />
+            </FormControl>
           </ModalBody>
+
           <ModalFooter gap={3}>
-            <Button
-              variant="primary"
-              type="submit"
-              isLoading={isSubmitting}
-              isDisabled={!isDirty}
-            >
+            <Button variant="primary" type="submit" isLoading={isSubmitting}>
               Save
             </Button>
-            <Button onClick={onCancel}>Cancel</Button>
+            <Button onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
     </>
+
   )
 }
 
-export default EditItem
+export default AddPost

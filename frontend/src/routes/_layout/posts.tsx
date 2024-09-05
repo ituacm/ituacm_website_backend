@@ -17,31 +17,31 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect } from "react"
 import { z } from "zod"
 
-import { ItemsService } from "../../client"
+import { PostsService } from "../../client"
 import ActionsMenu from "../../components/Common/ActionsMenu"
 import Navbar from "../../components/Common/Navbar"
-import AddItem from "../../components/Items/AddItem"
+import AddPost from "../../components/Posts/AddPost"
 
-const itemsSearchSchema = z.object({
+const postsSearchSchema = z.object({
   page: z.number().catch(1),
 })
 
-export const Route = createFileRoute("/_layout/items")({
-  component: Items,
-  validateSearch: (search) => itemsSearchSchema.parse(search),
+export const Route = createFileRoute("/_layout/posts")({
+  component: Posts,
+  validateSearch: (search) => postsSearchSchema.parse(search),
 })
 
 const PER_PAGE = 5
 
-function getItemsQueryOptions({ page }: { page: number }) {
+function getPostsQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      ItemsService.readItems({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
-    queryKey: ["items", { page }],
+      PostsService.readPosts({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+    queryKey: ["posts", { page }],
   }
 }
 
-function ItemsTable() {
+function PostsTable() {
   const queryClient = useQueryClient()
   const { page } = Route.useSearch()
   const navigate = useNavigate({ from: Route.fullPath })
@@ -49,20 +49,20 @@ function ItemsTable() {
     navigate({ search: (prev) => ({ ...prev, page }) })
 
   const {
-    data: items,
+    data: posts,
     isPending,
     isPlaceholderData,
   } = useQuery({
-    ...getItemsQueryOptions({ page }),
+    ...getPostsQueryOptions({ page }),
     placeholderData: (prevData) => prevData,
   })
 
-  const hasNextPage = !isPlaceholderData && items?.data.length === PER_PAGE
+  const hasNextPage = !isPlaceholderData && posts?.posts.length === PER_PAGE
   const hasPreviousPage = page > 1
 
   useEffect(() => {
     if (hasNextPage) {
-      queryClient.prefetchQuery(getItemsQueryOptions({ page: page + 1 }))
+      queryClient.prefetchQuery(getPostsQueryOptions({ page: page + 1 }))
     }
   }, [page, queryClient, hasNextPage])
 
@@ -75,13 +75,17 @@ function ItemsTable() {
               <Th>ID</Th>
               <Th>Title</Th>
               <Th>Description</Th>
+              <Th>Content</Th>
+              <Th>Image</Th>
+              <Th>Location</Th>
+              <Th>Visible</Th>
               <Th>Actions</Th>
             </Tr>
           </Thead>
           {isPending ? (
             <Tbody>
               <Tr>
-                {new Array(4).fill(null).map((_, index) => (
+                {new Array(10).fill(null).map((_, index) => (
                   <Td key={index}>
                     <SkeletonText noOfLines={1} paddingBlock="16px" />
                   </Td>
@@ -90,21 +94,29 @@ function ItemsTable() {
             </Tbody>
           ) : (
             <Tbody>
-              {items?.data.map((item) => (
-                <Tr key={item.id} opacity={isPlaceholderData ? 0.5 : 1}>
-                  <Td>{item.id}</Td>
+              {posts?.posts.map((post) => (
+                <Tr key={post.id} opacity={isPlaceholderData ? 0.5 : 1}>
+                  <Td>{post.id}</Td>
                   <Td isTruncated maxWidth="150px">
-                    {item.title}
+                    {post.title}
                   </Td>
                   <Td
-                    color={!item.description ? "ui.dim" : "inherit"}
+                    color={!post.description ? "ui.dim" : "inherit"}
                     isTruncated
                     maxWidth="150px"
                   >
-                    {item.description || "N/A"}
+                    {post.description || "N/A"}
                   </Td>
+                  <Td isTruncated maxWidth="150px">
+                    {post.content || "N/A"}
+                  </Td>
+                  <Td isTruncated maxWidth="150px">
+                    {post.image ? <img src={post.image} alt="Post" width={50} /> : "N/A"}
+                  </Td>
+
+                  <Td>{post.is_visible ? "Yes" : "No"}</Td>
                   <Td>
-                    <ActionsMenu type={"Item"} value={item} />
+                    <ActionsMenu type={"Post"} value={post} />
                   </Td>
                 </Tr>
               ))}
@@ -131,15 +143,15 @@ function ItemsTable() {
   )
 }
 
-function Items() {
+function Posts() {
   return (
     <Container maxW="full">
       <Heading size="lg" textAlign={{ base: "center", md: "left" }} pt={12}>
-        Items Management
+        Posts Management
       </Heading>
 
-      <Navbar type={"Item"} addModalAs={AddItem} />
-      <ItemsTable />
+      <Navbar type={"Post"} addModalAs={AddPost} />
+      <PostsTable />
     </Container>
   )
 }

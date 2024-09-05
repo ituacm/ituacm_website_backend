@@ -49,6 +49,323 @@ export const $Body_login_login_access_token = {
   },
 } as const
 
+export const $Event = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    content: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    image: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+    id: {
+      type: "any-of",
+      contains: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    created_at: {
+      type: "string",
+      format: "date-time",
+    },
+    created_by: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+    last_updated: {
+      type: "string",
+      format: "date-time",
+    },
+    updated_by: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+  },
+} as const
+
+export const $EventCreate = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    content: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    image: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $EventPublic = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    content: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    image: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+    id: {
+      type: "number",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $EventUpdate = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    content: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    image: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $EventsPublic = {
+  properties: {
+    events: {
+      type: "array",
+      contains: {
+        type: "EventPublic",
+      },
+      isRequired: true,
+    },
+    count: {
+      type: "number",
+      isRequired: true,
+    },
+  },
+} as const
+
 export const $HTTPValidationError = {
   properties: {
     detail: {
@@ -56,108 +373,6 @@ export const $HTTPValidationError = {
       contains: {
         type: "ValidationError",
       },
-    },
-  },
-} as const
-
-export const $ItemCreate = {
-  properties: {
-    title: {
-      type: "string",
-      isRequired: true,
-      maxLength: 255,
-      minLength: 1,
-    },
-    description: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-  },
-} as const
-
-export const $ItemPublic = {
-  properties: {
-    title: {
-      type: "string",
-      isRequired: true,
-      maxLength: 255,
-      minLength: 1,
-    },
-    description: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-    id: {
-      type: "string",
-      isRequired: true,
-      format: "uuid",
-    },
-    owner_id: {
-      type: "string",
-      isRequired: true,
-      format: "uuid",
-    },
-  },
-} as const
-
-export const $ItemUpdate = {
-  properties: {
-    title: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-          minLength: 1,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-    description: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
-    },
-  },
-} as const
-
-export const $ItemsPublic = {
-  properties: {
-    data: {
-      type: "array",
-      contains: {
-        type: "ItemPublic",
-      },
-      isRequired: true,
-    },
-    count: {
-      type: "number",
-      isRequired: true,
     },
   },
 } as const
@@ -182,6 +397,268 @@ export const $NewPassword = {
       isRequired: true,
       maxLength: 40,
       minLength: 8,
+    },
+  },
+} as const
+
+export const $Post = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    content: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    image: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "any-of",
+      contains: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    created_at: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    created_by: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+    last_updated: {
+      type: "string",
+      format: "date-time",
+    },
+    updated_by: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+  },
+} as const
+
+export const $PostCreate = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    content: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    image: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $PostPublic = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    content: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    image: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "number",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $PostUpdate = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    content: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    image: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $PostsPublic = {
+  properties: {
+    posts: {
+      type: "array",
+      contains: {
+        type: "PostPublic",
+      },
+      isRequired: true,
+    },
+    count: {
+      type: "number",
+      isRequired: true,
     },
   },
 } as const

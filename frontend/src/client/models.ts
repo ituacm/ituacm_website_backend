@@ -7,30 +7,63 @@ export type Body_login_login_access_token = {
   client_secret?: string | null
 }
 
+export type Event = {
+  title: string
+  description?: string | null
+  content?: string | null
+  image?: string | null
+  is_visible?: boolean | null
+  start: string
+  end: string
+  location: string
+  id?: number | null
+  created_at?: string
+  created_by: string
+  last_updated?: string
+  updated_by: string
+}
+
+export type EventCreate = {
+  title: string
+  description?: string | null
+  content?: string | null
+  image?: string | null
+  is_visible?: boolean | null
+  start: string
+  end: string
+  location: string
+}
+
+export type EventPublic = {
+  title: string
+  description?: string | null
+  content?: string | null
+  image?: string | null
+  is_visible?: boolean | null
+  start: string
+  end: string
+  location: string
+  id: number
+}
+
+export type EventUpdate = {
+  title: string
+  description?: string | null
+  content?: string | null
+  image?: string | null
+  is_visible?: boolean | null
+  start: string
+  end: string
+  location: string
+}
+
+export type EventsPublic = {
+  events: Array<EventPublic>
+  count: number
+}
+
 export type HTTPValidationError = {
   detail?: Array<ValidationError>
-}
-
-export type ItemCreate = {
-  title: string
-  description?: string | null
-}
-
-export type ItemPublic = {
-  title: string
-  description?: string | null
-  id: string
-  owner_id: string
-}
-
-export type ItemUpdate = {
-  title?: string | null
-  description?: string | null
-}
-
-export type ItemsPublic = {
-  data: Array<ItemPublic>
-  count: number
 }
 
 export type Message = {
@@ -40,6 +73,49 @@ export type Message = {
 export type NewPassword = {
   token: string
   new_password: string
+}
+
+export type Post = {
+  title: string
+  description?: string | null
+  content?: string | null
+  image?: string | null
+  is_visible?: boolean | null
+  id?: number | null
+  created_at: string
+  created_by: string
+  last_updated?: string
+  updated_by: string
+}
+
+export type PostCreate = {
+  title: string
+  description?: string | null
+  content?: string | null
+  image?: string | null
+  is_visible?: boolean | null
+}
+
+export type PostPublic = {
+  title: string
+  description?: string | null
+  content?: string | null
+  image?: string | null
+  is_visible?: boolean | null
+  id: number
+}
+
+export type PostUpdate = {
+  title: string
+  description?: string | null
+  content?: string | null
+  image?: string | null
+  is_visible?: boolean | null
+}
+
+export type PostsPublic = {
+  posts: Array<PostPublic>
+  count: number
 }
 
 export type Token = {

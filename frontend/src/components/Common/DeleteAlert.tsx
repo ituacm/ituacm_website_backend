@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import React from "react"
 import { useForm } from "react-hook-form"
 
-import { ItemsService, UsersService } from "../../client"
+import { PostsService, EventsService, UsersService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 
 interface DeleteProps {
@@ -30,9 +30,11 @@ const Delete = ({ type, id, isOpen, onClose }: DeleteProps) => {
     formState: { isSubmitting },
   } = useForm()
 
-  const deleteEntity = async (id: string) => {
-    if (type === "Item") {
-      await ItemsService.deleteItem({ id: id })
+  const deleteEntity = async (id: string ) => {
+    if (type === "Post") {
+      await PostsService.deletePost({ id: Number(id) })
+    } else if (type === "Event") {
+      await EventsService.deleteEvent({ id: Number(id) })
     } else if (type === "User") {
       await UsersService.deleteUser({ userId: id })
     } else {
@@ -58,9 +60,14 @@ const Delete = ({ type, id, isOpen, onClose }: DeleteProps) => {
       )
     },
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: [type === "Item" ? "items" : "users"],
-      })
+      if (type === "Post") {
+        queryClient.invalidateQueries({ queryKey: ["posts"] })
+      } else if (type === "Event") {
+        queryClient.invalidateQueries({ queryKey: ["events"] })
+      } else if (type === "User") {
+        queryClient.invalidateQueries({ queryKey: ["users"] })
+      }
+      
     },
   })
 
@@ -82,12 +89,6 @@ const Delete = ({ type, id, isOpen, onClose }: DeleteProps) => {
             <AlertDialogHeader>Delete {type}</AlertDialogHeader>
 
             <AlertDialogBody>
-              {type === "User" && (
-                <span>
-                  All items associated with this user will also be{" "}
-                  <strong>permantly deleted. </strong>
-                </span>
-              )}
               Are you sure? You will not be able to undo this action.
             </AlertDialogBody>
 
