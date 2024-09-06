@@ -14,15 +14,20 @@ router = APIRouter()
 
 @router.get("/", response_model=EventsPublic)
 def read_events(
-    session: SessionDep, skip: int = 0, limit: int = 100
+    session: SessionDep, currentUser: CurrentUser | None, skip: int = 0, limit: int = 100
 ) -> Any:
     """
     Retrieve events.
     """
 
-    count_statement = select(func.count()).select_from(Event).where(Event.is_visible == True)
+    count_statement = select(func.count()).select_from(Event)
+    statement = select(Event)
+    if currentUser == None:
+        count_statement = count_statement.where(Event.is_visible == True)
+        statement = statement.where(Event.is_visible == True)
+    
+    statement = statement.offset(skip).limit(limit)
     count = session.exec(count_statement).one()
-    statement = select(Event).where(Event.is_visible == True).offset(skip).limit(limit)
     events = session.exec(statement).all()
     
 
@@ -30,12 +35,12 @@ def read_events(
 
 
 @router.get("/{id}", response_model=EventPublic)
-def read_event(session: SessionDep, id: int) -> Any:
+def read_event(session: SessionDep, currentUser: CurrentUser | None, id: int) -> Any:
     """
     Get event by ID.
     """
     event = session.get(Event, id)
-    if not event or not event.post.is_visible:
+    if not event or (currentUser == None and not event.post.is_visible):
         raise HTTPException(status_code=404, detail="Event not found")
     return EventPublic(event)
 
