@@ -4,25 +4,34 @@ from typing import Any
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select
+from sqlmodel import func, select, update
 
+from app.constants import Group
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Post, PostCreate, PostUpdate, PostPublic, PostsPublic, Message
+from app.models import Lecture, Post, PostCreate, PostUpdate, PostPublic, PostsPublic, Message
+
+
 
 router = APIRouter()
 
 
 @router.get("/", response_model=PostsPublic)
 def read_posts(
-    session: SessionDep, skip: int = 0, limit: int = 100
+    session: SessionDep, currentUser: CurrentUser | None, skip: int = 0, limit: int = 100
 ) -> Any:
     """
     Retrieve posts.
     """
-
-    count_statement = select(func.count()).select_from(Post).where(Post.is_visible == True)
+    
+    count_statement = select(func.count()).select_from(Post)
+    statement = select(Post)
+    if currentUser == None:
+        # If public
+        count_statement = count_statement.where(Post.is_visible == True)
+        statement = statement.where(Post.is_visible == True)
+        
+    statement = statement.offset(skip).limit(limit)
     count = session.exec(count_statement).one()
-    statement = select(Post).where(Post.is_visible == True).offset(skip).limit(limit)
     posts = session.exec(statement).all()
     
 
@@ -30,12 +39,12 @@ def read_posts(
 
 
 @router.get("/{id}", response_model=PostPublic)
-def read_post(session: SessionDep, id: int) -> Any:
+def read_post(session: SessionDep, currentUser: CurrentUser | None, id: int) -> Any:
     """
     Get post by ID.
     """
     post = session.get(Post, id)
-    if not post or not post.is_visible:
+    if not post or (currentUser == None and not post.is_visible):
         raise HTTPException(status_code=404, detail="Post not found")
     return PostPublic(post)
 
@@ -75,6 +84,15 @@ def update_post(
         raise HTTPException(status_code=404, detail="Post not found")
     update_dict = post_in.model_dump(exclude_unset=True)
     post.sqlmodel_update(update_dict, update={"updated_by": current_user.id, "last_updated": datetime.now()})
+    
+    if post.group == Group.COURSE.value:
+        # Change visibility of all lectures of this post
+        update(Lecture).where(Lecture.post_id == post.id).values(
+            is_visible=post.is_visible,
+            updated_by=current_user.id,
+            last_updated=datetime.now()
+        )
+        
     session.add(post)
     session.commit()
     session.refresh(post)
