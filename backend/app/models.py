@@ -4,6 +4,7 @@ from datetime import datetime
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
+from app.constants import Group
 
 # Shared properties
 class UserBase(SQLModel):
@@ -62,6 +63,7 @@ class PostBase(SQLModel):
     content: str | None = Field(default=None)
     image: str | None = Field(default=None)
     is_visible: bool | None = Field(default=True)
+    group: int | None = Field(default=Group.POST.value)
 
 class PostCreate(PostBase):
     pass
@@ -71,6 +73,7 @@ class PostUpdate(PostBase):
 
 class PostPublic(PostBase):
     id: int
+    lectures: list["Lecture"] | None
 
 class PostsPublic(SQLModel):
     posts: list[PostPublic]
@@ -78,6 +81,7 @@ class PostsPublic(SQLModel):
 
 class Post(PostBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+    lectures: list["Lecture"] | None = Relationship(back_populates="post")
     created_at: datetime
     created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
     last_updated: datetime = Field(default_factory=datetime.now)
@@ -87,7 +91,6 @@ class EventBase(PostBase):
     start: datetime
     end: datetime
     location: str
-
 
 class EventCreate(EventBase):
     pass
@@ -107,6 +110,50 @@ class EventPublic(EventBase):
 
 class EventsPublic(SQLModel):
     events: list[EventPublic]
+    count: int
+
+class LectureBase(SQLModel):
+    title: str
+    start: datetime
+    end: datetime
+    location: str
+    is_visible: bool | None = Field(default=True)
+    post_id: int = Field(foreign_key="post.id")
+
+class Lecture(LectureBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    
+    post: Post = Relationship(back_populates="lectures", cascade_delete=True)
+    created_at: datetime = Field(default_factory=datetime.now)
+    created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
+    last_updated: datetime = Field(default_factory=datetime.now)
+    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True)
+
+class LectureUpdate(LectureBase): pass
+
+class LectureCreateBase(SQLModel):
+    title: str
+    start: datetime
+    end: datetime
+    location: str
+    is_visible: bool | None = Field(default=True)
+    
+class LectureCreate(LectureCreateBase):
+    id: int
+
+class LecturesCreate(SQLModel):
+    lectures: list[LectureCreateBase]
+    post: PostCreate
+
+class Lectures(SQLModel):
+    lectures: list[Lecture]
+    post: Post
+
+class LecturePublic(LectureBase):
+    id: int
+
+class LecturesPublic(SQLModel):
+    lectures: list[LecturePublic]
     count: int
 
 
