@@ -6,10 +6,8 @@ from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select, update
 
-from app.constants import Group
-from app.api.deps import CurrentUser, SessionDep
-from app.models import Lecture, Post, PostCreate, PostUpdate, PostPublic, PostsPublic, Message
-
+from app.api.deps import CurrentUser, CurrentUserOptional, SessionDep
+from app.models import Group, Lecture, Post, PostCreate, PostUpdate, PostPublic, PostsPublic, Message
 
 
 router = APIRouter()
@@ -17,14 +15,15 @@ router = APIRouter()
 
 @router.get("/", response_model=PostsPublic)
 def read_posts(
-    session: SessionDep, currentUser: CurrentUser | None, skip: int = 0, limit: int = 100
+    session: SessionDep, currentUser: CurrentUserOptional, group: int = 1, skip: int = 0, limit: int = 100
 ) -> Any:
     """
     Retrieve posts.
     """
-    
-    count_statement = select(func.count()).select_from(Post)
-    statement = select(Post)
+    print(group, type(group))
+    count_statement = select(func.count()).select_from(Post).where(Post.group_id == group)
+    statement = select(Post).where(Post.group_id == group)
+        
     if currentUser == None:
         # If public
         count_statement = count_statement.where(Post.is_visible == True)
@@ -39,14 +38,14 @@ def read_posts(
 
 
 @router.get("/{id}", response_model=PostPublic)
-def read_post(session: SessionDep, currentUser: CurrentUser | None, id: int) -> Any:
+def read_post(session: SessionDep, currentUser: CurrentUserOptional, id:int) -> Any:
     """
     Get post by ID.
     """
     post = session.get(Post, id)
     if not post or (currentUser == None and not post.is_visible):
         raise HTTPException(status_code=404, detail="Post not found")
-    return PostPublic(post)
+    return post
 
 
 @router.post("/", response_model=Post)
@@ -83,9 +82,11 @@ def update_post(
     if not post:
         raise HTTPException(status_code=404, detail="Post not found")
     update_dict = post_in.model_dump(exclude_unset=True)
+    
+    assert not (post.lectures and update_dict.get('group_id', None) == 1), "You can not convert to 'Post' type if the entry contains lectures"
     post.sqlmodel_update(update_dict, update={"updated_by": current_user.id, "last_updated": datetime.now()})
     
-    if post.group == Group.COURSE.value:
+    if post.group.name == 'Course':
         # Change visibility of all lectures of this post
         update(Lecture).where(Lecture.post_id == post.id).values(
             is_visible=post.is_visible,
