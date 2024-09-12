@@ -9,7 +9,13 @@ class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
     is_superuser: bool = False
-    full_name: str | None = Field(default=None, max_length=255)
+    full_name: str = Field(max_length=255)
+    photo_url: str
+    role: str
+    department: str
+    github_url: str | None = Field(default=None, nullable=True)
+    linked_in_url: str | None = Field(default=None, nullable=True)
+    is_public: bool = Field(default=False)
 
 
 # Properties to receive via API on creation
@@ -20,7 +26,7 @@ class UserCreate(UserBase):
 class UserRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
-    full_name: str | None = Field(default=None, max_length=255)
+    full_name: str = Field(default=None, max_length=255)
 
 
 # Properties to receive via API on update, all are optional
@@ -96,12 +102,12 @@ class PostsPublic(SQLModel):
 class Post(PostBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     lectures: list["Lecture"] = Relationship(back_populates="post", cascade_delete=True)
-    group_id: int = Field(foreign_key="group.id", default=1)
+    group_id: int = Field(foreign_key="group.id", default=1, ondelete="SET NULL", nullable=True)
     group: Group = Relationship(back_populates="posts")
     created_at: datetime
     created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
     last_updated: datetime = Field(default_factory=datetime.now)
-    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True)
+    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
 
 class EventBase(PostBase):
     start: datetime
@@ -119,7 +125,7 @@ class Event(EventBase, table=True):
     created_at: datetime = Field(default_factory=datetime.now)
     created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
     last_updated: datetime = Field(default_factory=datetime.now)
-    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True)
+    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
 
 class EventPublic(EventBase):
     id: int
@@ -134,7 +140,7 @@ class LectureBase(SQLModel):
     end: datetime
     location: str
     is_visible: bool | None = Field(default=True)
-    post_id: int | None = Field(foreign_key="post.id", default=None)
+    post_id: int | None = Field(foreign_key="post.id", default=None, ondelete="CASCADE")
 
 class Lecture(LectureBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -143,7 +149,7 @@ class Lecture(LectureBase, table=True):
     created_at: datetime = Field(default_factory=datetime.now)
     created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
     last_updated: datetime = Field(default_factory=datetime.now)
-    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True)
+    updated_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
 
 class LectureUpdate(LectureBase): pass
 

@@ -7,6 +7,7 @@ from sqlmodel import col, delete, func, select
 from app import crud
 from app.api.deps import (
     CurrentUser,
+    CurrentUserOptional,
     SessionDep,
     get_current_active_superuser,
 )
@@ -18,7 +19,6 @@ from app.models import (
     User,
     UserCreate,
     UserPublic,
-    UserRegister,
     UsersPublic,
     UserUpdate,
     UserUpdateMe,
@@ -30,18 +30,22 @@ router = APIRouter()
 
 @router.get(
     "/",
-    dependencies=[Depends(get_current_active_superuser)],
     response_model=UsersPublic,
 )
-def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
+def read_users(session: SessionDep, currentUser: CurrentUserOptional, skip: int = 0, limit: int = 100) -> Any:
     """
     Retrieve users.
     """
 
     count_statement = select(func.count()).select_from(User)
+    statement = select(User)
+    
+    if currentUser == None:
+        count_statement = count_statement.where(User.is_public == True)
+        statement = statement.where(User.is_public == True)
+    
+    statement = statement.offset(skip).limit(limit)
     count = session.exec(count_statement).one()
-
-    statement = select(User).offset(skip).limit(limit)
     users = session.exec(statement).all()
 
     return UsersPublic(data=users, count=count)
@@ -139,20 +143,20 @@ def delete_user_me(session: SessionDep, current_user: CurrentUser) -> Any:
     return Message(message="User deleted successfully")
 
 
-@router.post("/signup", response_model=UserPublic)
-def register_user(session: SessionDep, user_in: UserRegister) -> Any:
-    """
-    Create new user without the need to be logged in.
-    """
-    user = crud.get_user_by_email(session=session, email=user_in.email)
-    if user:
-        raise HTTPException(
-            status_code=400,
-            detail="The user with this email already exists in the system",
-        )
-    user_create = UserCreate.model_validate(user_in)
-    user = crud.create_user(session=session, user_create=user_create)
-    return user
+# @router.post("/signup", response_model=UserPublic)
+# def register_user(session: SessionDep, user_in: UserRegister) -> Any:
+#     """
+#     Create new user without the need to be logged in.
+#     """
+#     user = crud.get_user_by_email(session=session, email=user_in.email)
+#     if user:
+#         raise HTTPException(
+#             status_code=400,
+#             detail="The user with this email already exists in the system",
+#         )
+#     user_create = UserCreate.model_validate(user_in)
+#     user = crud.create_user(session=session, user_create=user_create)
+#     return user
 
 
 @router.get("/{user_id}", response_model=UserPublic)
