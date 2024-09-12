@@ -77,7 +77,7 @@ function PostsTable() {
               <Th>Description</Th>
               <Th>Content</Th>
               <Th>Image</Th>
-              <Th>Location</Th>
+              <Th>Group</Th>
               <Th>Visible</Th>
               <Th>Actions</Th>
             </Tr>
@@ -111,7 +111,16 @@ function PostsTable() {
                     {post.content || "N/A"}
                   </Td>
                   <Td isTruncated maxWidth="150px">
-                    {post.image ? <img src={post.image} alt="Post" width={50} /> : "N/A"}
+                    {post.image ? (
+                      <img src={post.image} alt="Image" width={50} />
+                    ) : (
+                      "N/A"
+                    )}
+                  </Td>
+
+                  {/* Group */}
+                  <Td isTruncated maxWidth="150px">
+                    {post.group.name}
                   </Td>
 
                   <Td>{post.is_visible ? "Yes" : "No"}</Td>
