@@ -48,8 +48,14 @@ const AddUser = ({ isOpen, onClose }: AddUserProps) => {
       full_name: "",
       password: "",
       confirm_password: "",
+      photo_url: "",
+      role: "",
+      department: "",
+      github_url: "",
+      linked_in_url: "",
       is_superuser: false,
-      is_active: false,
+      is_active: true,
+      is_public: false,
     },
   })
 
@@ -86,6 +92,7 @@ const AddUser = ({ isOpen, onClose }: AddUserProps) => {
           <ModalHeader>Add User</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
+            {/* Email */}
             <FormControl isRequired isInvalid={!!errors.email}>
               <FormLabel htmlFor="email">Email</FormLabel>
               <Input
@@ -101,11 +108,13 @@ const AddUser = ({ isOpen, onClose }: AddUserProps) => {
                 <FormErrorMessage>{errors.email.message}</FormErrorMessage>
               )}
             </FormControl>
-            <FormControl mt={4} isInvalid={!!errors.full_name}>
-              <FormLabel htmlFor="name">Full name</FormLabel>
+
+            {/* Full name */}
+            <FormControl mt={4} isRequired isInvalid={!!errors.full_name}>
+              <FormLabel htmlFor="full_name">Full name</FormLabel>
               <Input
-                id="name"
-                {...register("full_name")}
+                id="full_name"
+                {...register("full_name", { required: "Full name is required" })}
                 placeholder="Full name"
                 type="text"
               />
@@ -113,8 +122,84 @@ const AddUser = ({ isOpen, onClose }: AddUserProps) => {
                 <FormErrorMessage>{errors.full_name.message}</FormErrorMessage>
               )}
             </FormControl>
+
+            {/* Role */}
+            <FormControl mt={4} isRequired isInvalid={!!errors.role}>
+              <FormLabel htmlFor="role">Role</FormLabel>
+              <Input
+                id="role"
+                {...register("role", { required: "Role is required" })}
+                placeholder="Role"
+                type="text"
+              />
+              {errors.role && (
+                <FormErrorMessage>{errors.role.message}</FormErrorMessage>
+              )}
+            </FormControl>
+
+            {/* Department */}
+            <FormControl mt={4} isRequired isInvalid={!!errors.department}>
+              <FormLabel htmlFor="department">Department</FormLabel>
+              <Input
+                id="department"
+                {...register("department", {
+                  required: "Department is required",
+                })}
+                placeholder="Department"
+                type="text"
+              />
+              {errors.department && (
+                <FormErrorMessage>{errors.department.message}</FormErrorMessage>
+              )}
+            </FormControl>
+
+            {/* Photo URL */}
+            <FormControl mt={4} isInvalid={!!errors.photo_url}>
+              <FormLabel htmlFor="photo_url">Photo URL</FormLabel>
+              <Input
+                id="photo_url"
+                {...register("photo_url")}
+                placeholder="https://example.com/photo.jpg"
+                type="url"
+              />
+              {errors.photo_url && (
+                <FormErrorMessage>{errors.photo_url.message}</FormErrorMessage>
+              )}
+            </FormControl>
+
+            {/* GitHub URL */}
+            <FormControl mt={4} isInvalid={!!errors.github_url}>
+              <FormLabel htmlFor="github_url">GitHub URL</FormLabel>
+              <Input
+                id="github_url"
+                {...register("github_url")}
+                placeholder="https://github.com/username"
+                type="url"
+              />
+              {errors.github_url && (
+                <FormErrorMessage>{errors.github_url.message}</FormErrorMessage>
+              )}
+            </FormControl>
+
+            {/* LinkedIn URL */}
+            <FormControl mt={4} isInvalid={!!errors.linked_in_url}>
+              <FormLabel htmlFor="linked_in_url">LinkedIn URL</FormLabel>
+              <Input
+                id="linked_in_url"
+                {...register("linked_in_url")}
+                placeholder="https://linkedin.com/in/username"
+                type="url"
+              />
+              {errors.linked_in_url && (
+                <FormErrorMessage>
+                  {errors.linked_in_url.message}
+                </FormErrorMessage>
+              )}
+            </FormControl>
+
+            {/* Password */}
             <FormControl mt={4} isRequired isInvalid={!!errors.password}>
-              <FormLabel htmlFor="password">Set Password</FormLabel>
+              <FormLabel htmlFor="password">Password</FormLabel>
               <Input
                 id="password"
                 {...register("password", {
@@ -131,6 +216,8 @@ const AddUser = ({ isOpen, onClose }: AddUserProps) => {
                 <FormErrorMessage>{errors.password.message}</FormErrorMessage>
               )}
             </FormControl>
+
+            {/* Confirm Password */}
             <FormControl
               mt={4}
               isRequired
@@ -145,7 +232,7 @@ const AddUser = ({ isOpen, onClose }: AddUserProps) => {
                     value === getValues().password ||
                     "The passwords do not match",
                 })}
-                placeholder="Password"
+                placeholder="Confirm Password"
                 type="password"
               />
               {errors.confirm_password && (
@@ -154,6 +241,15 @@ const AddUser = ({ isOpen, onClose }: AddUserProps) => {
                 </FormErrorMessage>
               )}
             </FormControl>
+
+            {/* Is Public */}
+            <FormControl mt={4}>
+              <Checkbox {...register("is_public")} colorScheme="teal">
+                Is public profile?
+              </Checkbox>
+            </FormControl>
+
+            {/* Is Superuser and Is Active */}
             <Flex mt={4}>
               <FormControl>
                 <Checkbox {...register("is_superuser")} colorScheme="teal">

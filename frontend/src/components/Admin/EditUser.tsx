@@ -92,6 +92,7 @@ const EditUser = ({ user, isOpen, onClose }: EditUserProps) => {
           <ModalHeader>Edit User</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
+            {/* Email */}
             <FormControl isInvalid={!!errors.email}>
               <FormLabel htmlFor="email">Email</FormLabel>
               <Input
@@ -107,10 +108,73 @@ const EditUser = ({ user, isOpen, onClose }: EditUserProps) => {
                 <FormErrorMessage>{errors.email.message}</FormErrorMessage>
               )}
             </FormControl>
+
+            {/* Full name */}
             <FormControl mt={4}>
-              <FormLabel htmlFor="name">Full name</FormLabel>
-              <Input id="name" {...register("full_name")} type="text" />
+              <FormLabel htmlFor="full_name">Full name</FormLabel>
+              <Input
+                id="full_name"
+                {...register("full_name", { required: "Full name is required" })}
+                type="text"
+              />
             </FormControl>
+
+            {/* Role */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="role">Role</FormLabel>
+              <Input
+                id="role"
+                {...register("role", { required: "Role is required" })}
+                type="text"
+              />
+            </FormControl>
+
+            {/* Department */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="department">Department</FormLabel>
+              <Input
+                id="department"
+                {...register("department", {
+                  required: "Department is required",
+                })}
+                type="text"
+              />
+            </FormControl>
+
+            {/* GitHub URL */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="github_url">GitHub URL</FormLabel>
+              <Input
+                id="github_url"
+                {...register("github_url")}
+                placeholder="https://github.com/username"
+                type="url"
+              />
+            </FormControl>
+
+            {/* LinkedIn URL */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="linked_in_url">LinkedIn URL</FormLabel>
+              <Input
+                id="linked_in_url"
+                {...register("linked_in_url")}
+                placeholder="https://linkedin.com/in/username"
+                type="url"
+              />
+            </FormControl>
+
+            {/* Profile Photo URL */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="photo_url">Profile Photo URL</FormLabel>
+              <Input
+                id="photo_url"
+                {...register("photo_url", { required: "Photo URL is required" })}
+                placeholder="https://example.com/photo.jpg"
+                type="url"
+              />
+            </FormControl>
+
+            {/* Password */}
             <FormControl mt={4} isInvalid={!!errors.password}>
               <FormLabel htmlFor="password">Set Password</FormLabel>
               <Input
@@ -128,6 +192,8 @@ const EditUser = ({ user, isOpen, onClose }: EditUserProps) => {
                 <FormErrorMessage>{errors.password.message}</FormErrorMessage>
               )}
             </FormControl>
+
+            {/* Confirm Password */}
             <FormControl mt={4} isInvalid={!!errors.confirm_password}>
               <FormLabel htmlFor="confirm_password">Confirm Password</FormLabel>
               <Input
@@ -137,7 +203,7 @@ const EditUser = ({ user, isOpen, onClose }: EditUserProps) => {
                     value === getValues().password ||
                     "The passwords do not match",
                 })}
-                placeholder="Password"
+                placeholder="Confirm Password"
                 type="password"
               />
               {errors.confirm_password && (
@@ -146,13 +212,22 @@ const EditUser = ({ user, isOpen, onClose }: EditUserProps) => {
                 </FormErrorMessage>
               )}
             </FormControl>
-            <Flex>
-              <FormControl mt={4}>
+
+            {/* Public Profile */}
+            <FormControl mt={4}>
+              <Checkbox {...register("is_public")} colorScheme="teal">
+                Is public profile?
+              </Checkbox>
+            </FormControl>
+
+            {/* Superuser and Active */}
+            <Flex mt={4}>
+              <FormControl>
                 <Checkbox {...register("is_superuser")} colorScheme="teal">
                   Is superuser?
                 </Checkbox>
               </FormControl>
-              <FormControl mt={4}>
+              <FormControl>
                 <Checkbox {...register("is_active")} colorScheme="teal">
                   Is active?
                 </Checkbox>

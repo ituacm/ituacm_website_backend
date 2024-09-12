@@ -10,7 +10,6 @@ import type {
   UserPublic,
   UpdatePassword,
   UserCreate,
-  UserRegister,
   UsersPublic,
   UserUpdate,
   UserUpdateMe,
@@ -164,9 +163,6 @@ export type TDataUpdateUserMe = {
 export type TDataUpdatePasswordMe = {
   requestBody: UpdatePassword
 }
-export type TDataRegisterUser = {
-  requestBody: UserRegister
-}
 export type TDataReadUserById = {
   userId: string
 }
@@ -283,27 +279,6 @@ export class UsersService {
     return __request(OpenAPI, {
       method: "PATCH",
       url: "/api/v1/users/me/password",
-      body: requestBody,
-      mediaType: "application/json",
-      errors: {
-        422: `Validation Error`,
-      },
-    })
-  }
-
-  /**
-   * Register User
-   * Create new user without the need to be logged in.
-   * @returns UserPublic Successful Response
-   * @throws ApiError
-   */
-  public static registerUser(
-    data: TDataRegisterUser,
-  ): CancelablePromise<UserPublic> {
-    const { requestBody } = data
-    return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/users/signup",
       body: requestBody,
       mediaType: "application/json",
       errors: {

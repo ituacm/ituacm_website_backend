@@ -232,7 +232,13 @@ export type UserCreate = {
   email: string
   is_active?: boolean
   is_superuser?: boolean
-  full_name?: string | null
+  full_name: string
+  photo_url: string
+  role: string
+  department: string
+  github_url?: string | null
+  linked_in_url?: string | null
+  is_public?: boolean
   password: string
 }
 
@@ -240,21 +246,27 @@ export type UserPublic = {
   email: string
   is_active?: boolean
   is_superuser?: boolean
-  full_name?: string | null
+  full_name: string
+  photo_url: string
+  role: string
+  department: string
+  github_url?: string | null
+  linked_in_url?: string | null
+  is_public?: boolean
   id: string
-}
-
-export type UserRegister = {
-  email: string
-  password: string
-  full_name?: string | null
 }
 
 export type UserUpdate = {
   email?: string | null
   is_active?: boolean
   is_superuser?: boolean
-  full_name?: string | null
+  full_name: string
+  photo_url: string
+  role: string
+  department: string
+  github_url?: string | null
+  linked_in_url?: string | null
+  is_public?: boolean
   password?: string | null
 }
 

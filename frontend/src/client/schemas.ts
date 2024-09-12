@@ -1216,16 +1216,47 @@ export const $UserCreate = {
       default: false,
     },
     full_name: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+    },
+    photo_url: {
+      type: "string",
+      isRequired: true,
+    },
+    role: {
+      type: "string",
+      isRequired: true,
+    },
+    department: {
+      type: "string",
+      isRequired: true,
+    },
+    github_url: {
       type: "any-of",
       contains: [
         {
           type: "string",
-          maxLength: 255,
         },
         {
           type: "null",
         },
       ],
+    },
+    linked_in_url: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_public: {
+      type: "boolean",
+      default: false,
     },
     password: {
       type: "string",
@@ -1253,50 +1284,52 @@ export const $UserPublic = {
       default: false,
     },
     full_name: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+    },
+    photo_url: {
+      type: "string",
+      isRequired: true,
+    },
+    role: {
+      type: "string",
+      isRequired: true,
+    },
+    department: {
+      type: "string",
+      isRequired: true,
+    },
+    github_url: {
       type: "any-of",
       contains: [
         {
           type: "string",
-          maxLength: 255,
         },
         {
           type: "null",
         },
       ],
+    },
+    linked_in_url: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_public: {
+      type: "boolean",
+      default: false,
     },
     id: {
       type: "string",
       isRequired: true,
       format: "uuid",
-    },
-  },
-} as const
-
-export const $UserRegister = {
-  properties: {
-    email: {
-      type: "string",
-      isRequired: true,
-      format: "email",
-      maxLength: 255,
-    },
-    password: {
-      type: "string",
-      isRequired: true,
-      maxLength: 40,
-      minLength: 8,
-    },
-    full_name: {
-      type: "any-of",
-      contains: [
-        {
-          type: "string",
-          maxLength: 255,
-        },
-        {
-          type: "null",
-        },
-      ],
     },
   },
 } as const
@@ -1325,16 +1358,47 @@ export const $UserUpdate = {
       default: false,
     },
     full_name: {
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+    },
+    photo_url: {
+      type: "string",
+      isRequired: true,
+    },
+    role: {
+      type: "string",
+      isRequired: true,
+    },
+    department: {
+      type: "string",
+      isRequired: true,
+    },
+    github_url: {
       type: "any-of",
       contains: [
         {
           type: "string",
-          maxLength: 255,
         },
         {
           type: "null",
         },
       ],
+    },
+    linked_in_url: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    is_public: {
+      type: "boolean",
+      default: false,
     },
     password: {
       type: "any-of",

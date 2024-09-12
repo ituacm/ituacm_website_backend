@@ -5,6 +5,7 @@ import {
   Container,
   Flex,
   Heading,
+  Link,
   SkeletonText,
   Table,
   TableContainer,
@@ -75,9 +76,12 @@ function UsersTable() {
         <Table size={{ base: "sm", md: "md" }}>
           <Thead>
             <Tr>
-              <Th width="20%">Full name</Th>
-              <Th width="50%">Email</Th>
+              <Th width="20%">Full Name</Th>
+              <Th width="20%">Email</Th>
               <Th width="10%">Role</Th>
+              <Th width="10%">Department</Th>
+              <Th width="10%">GitHub</Th>
+              <Th width="10%">LinkedIn</Th>
               <Th width="10%">Status</Th>
               <Th width="10%">Actions</Th>
             </Tr>
@@ -85,7 +89,7 @@ function UsersTable() {
           {isPending ? (
             <Tbody>
               <Tr>
-                {new Array(4).fill(null).map((_, index) => (
+                {new Array(9).fill(null).map((_, index) => (
                   <Td key={index}>
                     <SkeletonText noOfLines={1} paddingBlock="16px" />
                   </Td>
@@ -111,7 +115,26 @@ function UsersTable() {
                   <Td isTruncated maxWidth="150px">
                     {user.email}
                   </Td>
-                  <Td>{user.is_superuser ? "Superuser" : "User"}</Td>
+                  <Td>{user.role}</Td>
+                  <Td>{user.department}</Td>
+                  <Td>
+                    {user.github_url ? (
+                      <Link href={user.github_url} isExternal>
+                        GitHub
+                      </Link>
+                    ) : (
+                      "N/A"
+                    )}
+                  </Td>
+                  <Td>
+                    {user.linked_in_url ? (
+                      <Link href={user.linked_in_url} isExternal>
+                        LinkedIn
+                      </Link>
+                    ) : (
+                      "N/A"
+                    )}
+                  </Td>
                   <Td>
                     <Flex gap={2}>
                       <Box
