@@ -144,16 +144,6 @@ const EditEvent = ({ event, isOpen, onClose }: EditEventProps) => {
               />
             </FormControl>
 
-            {/* Visibility */}
-            <FormControl mt={4}>
-              <FormLabel htmlFor="is_visible">Is Visible</FormLabel>
-              <Switch
-                id="is_visible"
-                {...register("is_visible")}
-                isChecked={isVisible}
-              />
-            </FormControl>
-
             {/* Start Date */}
             <FormControl mt={4} isInvalid={!!errors.start}>
               <FormLabel htmlFor="start">Start Date and Time</FormLabel>
@@ -182,6 +172,27 @@ const EditEvent = ({ event, isOpen, onClose }: EditEventProps) => {
               {errors.end && (
                 <FormErrorMessage>{errors.end.message}</FormErrorMessage>
               )}
+            </FormControl>
+
+            {/* Application Link */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="image">Application Link</FormLabel>
+              <Input
+                id="application_link"
+                {...register("application_link")}
+                placeholder="Application Link"
+                type="text"
+              />
+            </FormControl>
+
+            {/* Visibility */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="is_visible">Is Visible</FormLabel>
+              <Switch
+                id="is_visible"
+                {...register("is_visible")}
+                isChecked={isVisible}
+              />
             </FormControl>
           </ModalBody>
 

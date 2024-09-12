@@ -177,6 +177,17 @@ const AddEvent = ({ isOpen, onClose }: AddEventProps) => {
                 <FormErrorMessage>{errors.end.message}</FormErrorMessage>
               )}
             </FormControl>
+
+            {/* Application Link */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="image">Application Link</FormLabel>
+              <Input
+                id="application_link"
+                {...register("application_link")}
+                placeholder="Application Link"
+                type="text"
+              />
+            </FormControl>
           </ModalBody>
 
           <ModalFooter gap={3}>
