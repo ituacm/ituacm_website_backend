@@ -6,7 +6,7 @@ from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
-from app.api.deps import CurrentUser, SessionDep
+from app.api.deps import CurrentUser, CurrentUserOptional, SessionDep
 from app.models import Event, EventCreate, EventUpdate, EventPublic, EventsPublic, Message
 
 router = APIRouter()
@@ -14,7 +14,7 @@ router = APIRouter()
 
 @router.get("/", response_model=EventsPublic)
 def read_events(
-    session: SessionDep, currentUser: CurrentUser | None, skip: int = 0, limit: int = 100
+    session: SessionDep, currentUser: CurrentUserOptional, skip: int = 0, limit: int = 100
 ) -> Any:
     """
     Retrieve events.
@@ -35,14 +35,14 @@ def read_events(
 
 
 @router.get("/{id}", response_model=EventPublic)
-def read_event(session: SessionDep, currentUser: CurrentUser | None, id: int) -> Any:
+def read_event(session: SessionDep, currentUser: CurrentUserOptional, id:int) -> Any:
     """
     Get event by ID.
     """
     event = session.get(Event, id)
     if not event or (currentUser == None and not event.post.is_visible):
         raise HTTPException(status_code=404, detail="Event not found")
-    return EventPublic(event)
+    return event
 
 
 @router.post("/", response_model=Event)
