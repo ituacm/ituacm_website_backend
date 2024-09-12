@@ -11,12 +11,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Switch,
 } from "@chakra-ui/react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, type PostCreate, PostsService } from "../../client"
+import { type ApiError, type PostCreate, PostsService, GroupsService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
@@ -25,9 +26,21 @@ interface AddPostProps {
   onClose: () => void
 }
 
+function getGroupsQueryOptions() {
+  return {
+    queryFn: () =>
+      GroupsService.readGroups(),
+    queryKey: ["groups"],
+  }
+}
+
 const AddPost = ({ isOpen, onClose }: AddPostProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
+
+  // Fetch groups using useQuery
+  const { data: groupsData, isLoading: isGroupsLoading } = useQuery({...getGroupsQueryOptions()})
+
   const {
     register,
     handleSubmit,
@@ -40,6 +53,11 @@ const AddPost = ({ isOpen, onClose }: AddPostProps) => {
     defaultValues: {
       title: "",
       description: "",
+      content: "",
+      image: "",
+      is_visible: true,
+      application_link: "",
+      group_id: undefined,
     },
   })
 
@@ -60,10 +78,10 @@ const AddPost = ({ isOpen, onClose }: AddPostProps) => {
   })
 
   const onSubmit: SubmitHandler<PostCreate> = (data) => {
-    mutation.mutate(data)
+    mutation.mutate(data);
   }
 
-  const isVisible = watch("is_visible") ?? true;
+  const isVisible = watch("is_visible") ?? true
 
   return (
     <>
@@ -127,6 +145,39 @@ const AddPost = ({ isOpen, onClose }: AddPostProps) => {
               />
             </FormControl>
 
+            {/* Group Selection */}
+            <FormControl mt={4} isRequired isInvalid={!!errors.group_id}>
+              <FormLabel htmlFor="group_id">Group</FormLabel>
+              <Select
+                id="group_id"
+                placeholder="Select group"
+                {...register("group_id", {
+                  required: "Group is required.",
+                  valueAsNumber: true,
+                })}
+                isDisabled={isGroupsLoading}
+              >
+                {groupsData?.groups.map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))}
+              </Select>
+              {errors.group_id && (
+                <FormErrorMessage>{errors.group_id.message}</FormErrorMessage>
+              )}
+            </FormControl>
+
+            {/* Application Link */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="image">Application Link</FormLabel>
+              <Input
+                id="application_link"
+                {...register("application_link")}
+                placeholder="Application Link"
+                type="text"
+              />
+            </FormControl>
 
             {/* Visibility */}
             <FormControl mt={4}>
@@ -148,7 +199,6 @@ const AddPost = ({ isOpen, onClose }: AddPostProps) => {
         </ModalContent>
       </Modal>
     </>
-
   )
 }
 

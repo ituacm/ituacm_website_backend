@@ -11,9 +11,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Switch,
 } from "@chakra-ui/react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
 import {
@@ -21,6 +22,7 @@ import {
   type PostPublic,
   type PostUpdate,
   PostsService,
+  GroupsService,
 } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
@@ -31,9 +33,21 @@ interface EditPostProps {
   onClose: () => void
 }
 
+function getGroupsQueryOptions() {
+  return {
+    queryFn: () =>
+      GroupsService.readGroups(),
+    queryKey: ["groups"],
+  }
+}
+
 const EditPost = ({ post, isOpen, onClose }: EditPostProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
+
+  // Fetch groups using useQuery
+  const { data: groupsData, isLoading: isGroupsLoading } = useQuery({...getGroupsQueryOptions()})
+
   const {
     register,
     handleSubmit,
@@ -70,7 +84,7 @@ const EditPost = ({ post, isOpen, onClose }: EditPostProps) => {
     onClose()
   }
 
-  const isVisible = watch("is_visible") ?? true;
+  const isVisible = watch("is_visible") ?? true
 
   return (
     <>
@@ -133,6 +147,39 @@ const EditPost = ({ post, isOpen, onClose }: EditPostProps) => {
               />
             </FormControl>
 
+            {/* Group Selection */}
+            <FormControl mt={4} isRequired isInvalid={!!errors.group_id}>
+              <FormLabel htmlFor="group_id">Group</FormLabel>
+              <Select
+                id="group_id"
+                placeholder="Select group"
+                {...register("group_id", {
+                  required: "Group is required.",
+                  valueAsNumber: true,
+                })}
+                isDisabled={isGroupsLoading}
+              >
+                {groupsData?.groups.map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))}
+              </Select>
+              {errors.group_id && (
+                <FormErrorMessage>{errors.group_id.message}</FormErrorMessage>
+              )}
+            </FormControl>
+
+            {/* Application Link */}
+            <FormControl mt={4}>
+              <FormLabel htmlFor="image">Application Link</FormLabel>
+              <Input
+                id="application_link"
+                {...register("application_link")}
+                placeholder="Application Link"
+                type="text"
+              />
+            </FormControl>
 
             {/* Visibility */}
             <FormControl mt={4}>
@@ -159,7 +206,7 @@ const EditPost = ({ post, isOpen, onClose }: EditPostProps) => {
         </ModalContent>
       </Modal>
     </>
-  );
+  )
 }
 
 export default EditPost
