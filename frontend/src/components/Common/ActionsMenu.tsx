@@ -7,17 +7,19 @@ import {
   useDisclosure,
 } from "@chakra-ui/react"
 import { BsThreeDotsVertical } from "react-icons/bs"
-import { FiEdit, FiTrash } from "react-icons/fi"
+import { FiEdit, FiPlus, FiTrash } from "react-icons/fi"
 
-import type { PostPublic, EventPublic, UserPublic } from "../../client"
+import type { PostPublic, EventPublic, UserPublic, Lecture, LecturePublic } from "../../client"
 import EditUser from "../Admin/EditUser"
 import EditPost from "../Posts/EditPost"
 import EditEvent from "../Events/EditEvent"
+import EditLecture from "../Lectures/EditLecture"
+import AddLecture from "../Lectures/AddLecture"
 import Delete from "./DeleteAlert"
 
 interface ActionsMenuProps {
   type: string
-  value: PostPublic | EventPublic | UserPublic
+  value: PostPublic | EventPublic | UserPublic | Lecture
   disabled?: boolean
 }
 
@@ -25,6 +27,8 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
   const editUserModal = useDisclosure();
   const editPostModal = useDisclosure();
   const editEventModal = useDisclosure();
+  const editLectureModal = useDisclosure();
+  const addLectureModal = useDisclosure();
   const deleteModal = useDisclosure();
 
   const handleEditOpen = () => {
@@ -34,6 +38,8 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
       editPostModal.onOpen();
     } else if (type === "Event") {
       editEventModal.onOpen();
+    } else if (type === "Lecture") {
+      editLectureModal.onOpen();
     }
   };
 
@@ -53,6 +59,12 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
           >
             Edit {type}
           </MenuItem>
+          {(value as PostPublic).group && (value as PostPublic).group.id != 1 && <MenuItem
+            onClick={addLectureModal.onOpen}
+            icon={<FiPlus fontSize="16px" />}
+          > 
+            Add Lecture 
+          </MenuItem>}
           <MenuItem
             onClick={deleteModal.onOpen}
             icon={<FiTrash fontSize="16px" />}
@@ -81,6 +93,21 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
             event={value as EventPublic}
             isOpen={editEventModal.isOpen}
             onClose={editEventModal.onClose}
+          />
+        )}
+        {type === "Lecture" && (
+          <EditLecture
+            lecture={value as LecturePublic}
+            isOpen={editLectureModal.isOpen}
+            onClose={editLectureModal.onClose}
+          />
+        )}
+
+        {type === "Post" && (
+          <AddLecture
+            post={(value as PostPublic)}
+            isOpen={addLectureModal.isOpen}
+            onClose={addLectureModal.onClose}
           />
         )}
 
