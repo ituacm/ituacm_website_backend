@@ -99,6 +99,18 @@ export const $Event = {
         },
       ],
     },
+    application_link: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
+    },
     start: {
       type: "string",
       isRequired: true,
@@ -195,6 +207,18 @@ export const $EventCreate = {
         },
       ],
     },
+    application_link: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
+    },
     start: {
       type: "string",
       isRequired: true,
@@ -261,6 +285,18 @@ export const $EventPublic = {
           type: "null",
         },
       ],
+    },
+    application_link: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
     },
     start: {
       type: "string",
@@ -333,6 +369,18 @@ export const $EventUpdate = {
         },
       ],
     },
+    application_link: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
+    },
     start: {
       type: "string",
       isRequired: true,
@@ -366,6 +414,97 @@ export const $EventsPublic = {
   },
 } as const
 
+export const $Group = {
+  properties: {
+    name: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "any-of",
+      contains: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $GroupBase = {
+  properties: {
+    name: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $GroupPublic = {
+  properties: {
+    name: {
+      type: "string",
+      isRequired: true,
+    },
+    description: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "number",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $GroupsPublic = {
+  properties: {
+    groups: {
+      type: "array",
+      contains: {
+        type: "GroupPublic",
+      },
+      isRequired: true,
+    },
+    count: {
+      type: "number",
+      default: 0,
+    },
+  },
+} as const
+
 export const $HTTPValidationError = {
   properties: {
     detail: {
@@ -373,6 +512,294 @@ export const $HTTPValidationError = {
       contains: {
         type: "ValidationError",
       },
+    },
+  },
+} as const
+
+export const $Lecture = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    post_id: {
+      type: "any-of",
+      contains: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "any-of",
+      contains: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    created_at: {
+      type: "string",
+      format: "date-time",
+    },
+    created_by: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+    last_updated: {
+      type: "string",
+      format: "date-time",
+    },
+    updated_by: {
+      type: "string",
+      isRequired: true,
+      format: "uuid",
+    },
+  },
+} as const
+
+export const $LectureCreate = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    post_id: {
+      type: "number",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $LectureCreateBase = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $LecturePublic = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    post_id: {
+      type: "any-of",
+      contains: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    id: {
+      type: "number",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $LectureUpdate = {
+  properties: {
+    title: {
+      type: "string",
+      isRequired: true,
+    },
+    start: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    end: {
+      type: "string",
+      isRequired: true,
+      format: "date-time",
+    },
+    location: {
+      type: "string",
+      isRequired: true,
+    },
+    is_visible: {
+      type: "any-of",
+      contains: [
+        {
+          type: "boolean",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+    post_id: {
+      type: "any-of",
+      contains: [
+        {
+          type: "number",
+        },
+        {
+          type: "null",
+        },
+      ],
+    },
+  },
+} as const
+
+export const $Lectures = {
+  properties: {
+    lectures: {
+      type: "array",
+      contains: {
+        type: "Lecture",
+      },
+      isRequired: true,
+    },
+    post: {
+      type: "Post",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $LecturesCreate = {
+  properties: {
+    lectures: {
+      type: "array",
+      contains: {
+        type: "LectureCreateBase",
+      },
+      isRequired: true,
+    },
+    post: {
+      type: "PostCreate",
+      isRequired: true,
+    },
+  },
+} as const
+
+export const $LecturesPublic = {
+  properties: {
+    lectures: {
+      type: "array",
+      contains: {
+        type: "LecturePublic",
+      },
+      isRequired: true,
+    },
+    count: {
+      type: "number",
+      isRequired: true,
     },
   },
 } as const
@@ -451,6 +878,18 @@ export const $Post = {
         },
       ],
     },
+    application_link: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
+    },
     id: {
       type: "any-of",
       contains: [
@@ -461,6 +900,10 @@ export const $Post = {
           type: "null",
         },
       ],
+    },
+    group_id: {
+      type: "number",
+      default: 1,
     },
     created_at: {
       type: "string",
@@ -534,6 +977,22 @@ export const $PostCreate = {
         },
       ],
     },
+    application_link: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
+    },
+    group_id: {
+      type: "number",
+      default: 1,
+    },
   },
 } as const
 
@@ -587,8 +1046,39 @@ export const $PostPublic = {
         },
       ],
     },
+    application_link: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
+    },
     id: {
       type: "number",
+      isRequired: true,
+    },
+    group: {
+      type: "Group",
+      isRequired: true,
+    },
+    lectures: {
+      type: "any-of",
+      contains: [
+        {
+          type: "array",
+          contains: {
+            type: "Lecture",
+          },
+        },
+        {
+          type: "null",
+        },
+      ],
       isRequired: true,
     },
   },
@@ -643,6 +1133,22 @@ export const $PostUpdate = {
           type: "null",
         },
       ],
+    },
+    application_link: {
+      type: "any-of",
+      contains: [
+        {
+          type: "string",
+        },
+        {
+          type: "null",
+        },
+      ],
+      isRequired: true,
+    },
+    group_id: {
+      type: "number",
+      default: 1,
     },
   },
 } as const

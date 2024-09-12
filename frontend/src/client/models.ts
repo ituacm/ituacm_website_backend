@@ -13,6 +13,7 @@ export type Event = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
+  application_link: string | null
   start: string
   end: string
   location: string
@@ -29,6 +30,7 @@ export type EventCreate = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
+  application_link: string | null
   start: string
   end: string
   location: string
@@ -40,6 +42,7 @@ export type EventPublic = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
+  application_link: string | null
   start: string
   end: string
   location: string
@@ -52,6 +55,7 @@ export type EventUpdate = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
+  application_link: string | null
   start: string
   end: string
   location: string
@@ -62,8 +66,95 @@ export type EventsPublic = {
   count: number
 }
 
+export type Group = {
+  name: string
+  description?: string | null
+  id?: number | null
+}
+
+export type GroupBase = {
+  name: string
+  description?: string | null
+}
+
+export type GroupPublic = {
+  name: string
+  description?: string | null
+  id: number
+}
+
+export type GroupsPublic = {
+  groups: Array<GroupPublic>
+  count?: number
+}
+
 export type HTTPValidationError = {
   detail?: Array<ValidationError>
+}
+
+export type Lecture = {
+  title: string
+  start: string
+  end: string
+  location: string
+  is_visible?: boolean | null
+  post_id?: number | null
+  id?: number | null
+  created_at?: string
+  created_by: string
+  last_updated?: string
+  updated_by: string
+}
+
+export type LectureCreate = {
+  title: string
+  start: string
+  end: string
+  location: string
+  is_visible?: boolean | null
+  post_id: number
+}
+
+export type LectureCreateBase = {
+  title: string
+  start: string
+  end: string
+  location: string
+  is_visible?: boolean | null
+}
+
+export type LecturePublic = {
+  title: string
+  start: string
+  end: string
+  location: string
+  is_visible?: boolean | null
+  post_id?: number | null
+  id: number
+}
+
+export type LectureUpdate = {
+  title: string
+  start: string
+  end: string
+  location: string
+  is_visible?: boolean | null
+  post_id?: number | null
+}
+
+export type Lectures = {
+  lectures: Array<Lecture>
+  post: Post
+}
+
+export type LecturesCreate = {
+  lectures: Array<LectureCreateBase>
+  post: PostCreate
+}
+
+export type LecturesPublic = {
+  lectures: Array<LecturePublic>
+  count: number
 }
 
 export type Message = {
@@ -81,7 +172,9 @@ export type Post = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
+  application_link: string | null
   id?: number | null
+  group_id?: number
   created_at: string
   created_by: string
   last_updated?: string
@@ -94,6 +187,8 @@ export type PostCreate = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
+  application_link: string | null
+  group_id?: number
 }
 
 export type PostPublic = {
@@ -102,7 +197,10 @@ export type PostPublic = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
+  application_link: string | null
   id: number
+  group: Group
+  lectures: Array<Lecture> | null
 }
 
 export type PostUpdate = {
@@ -111,6 +209,8 @@ export type PostUpdate = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
+  application_link: string | null
+  group_id?: number
 }
 
 export type PostsPublic = {

@@ -24,6 +24,17 @@ import type {
   EventPublic,
   EventsPublic,
   EventUpdate,
+  Lecture,
+  LectureCreate,
+  LecturePublic,
+  Lectures,
+  LecturesCreate,
+  LecturesPublic,
+  LectureUpdate,
+  Group,
+  GroupBase,
+  GroupPublic,
+  GroupsPublic,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -395,6 +406,7 @@ export class UtilsService {
 }
 
 export type TDataReadPosts = {
+  group?: number
   limit?: number
   skip?: number
 }
@@ -422,11 +434,12 @@ export class PostsService {
   public static readPosts(
     data: TDataReadPosts = {},
   ): CancelablePromise<PostsPublic> {
-    const { limit = 100, skip = 0 } = data
+    const { group = 1, limit = 100, skip = 0 } = data
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/posts/",
       query: {
+        group,
         skip,
         limit,
       },
@@ -636,6 +649,276 @@ export class EventsService {
     return __request(OpenAPI, {
       method: "DELETE",
       url: "/api/v1/events/{id}",
+      path: {
+        id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+}
+
+export type TDataReadLectures = {
+  limit?: number
+  skip?: number
+}
+export type TDataCreateLecture = {
+  requestBody: LectureCreate
+}
+export type TDataReadLecture = {
+  id: number
+}
+export type TDataUpdateLecture = {
+  id: number
+  requestBody: LectureUpdate
+}
+export type TDataDeleteLecture = {
+  id: number
+}
+export type TDataCreateLectures = {
+  requestBody: LecturesCreate
+}
+
+export class LecturesService {
+  /**
+   * Read Lectures
+   * Retrieve lectures.
+   * @returns LecturesPublic Successful Response
+   * @throws ApiError
+   */
+  public static readLectures(
+    data: TDataReadLectures = {},
+  ): CancelablePromise<LecturesPublic> {
+    const { limit = 100, skip = 0 } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/lectures/",
+      query: {
+        skip,
+        limit,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Create Lecture
+   * Creates a single lecture
+   * @returns Lecture Successful Response
+   * @throws ApiError
+   */
+  public static createLecture(
+    data: TDataCreateLecture,
+  ): CancelablePromise<Lecture> {
+    const { requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/lectures/",
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Read Lecture
+   * Get lecture by ID.
+   * @returns LecturePublic Successful Response
+   * @throws ApiError
+   */
+  public static readLecture(
+    data: TDataReadLecture,
+  ): CancelablePromise<LecturePublic> {
+    const { id } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/lectures/{id}",
+      path: {
+        id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Update Lecture
+   * Update a lecture.
+   * @returns Lecture Successful Response
+   * @throws ApiError
+   */
+  public static updateLecture(
+    data: TDataUpdateLecture,
+  ): CancelablePromise<Lecture> {
+    const { id, requestBody } = data
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/lectures/{id}",
+      path: {
+        id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Delete Lecture
+   * Delete a lecture.
+   * @returns Message Successful Response
+   * @throws ApiError
+   */
+  public static deleteLecture(
+    data: TDataDeleteLecture,
+  ): CancelablePromise<Message> {
+    const { id } = data
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/lectures/{id}",
+      path: {
+        id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Create Lectures
+   * Creates new lectures with a post.
+   * @returns Lectures Successful Response
+   * @throws ApiError
+   */
+  public static createLectures(
+    data: TDataCreateLectures,
+  ): CancelablePromise<Lectures> {
+    const { requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/lectures/multiple/",
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+}
+
+export type TDataCreateGroup = {
+  requestBody: GroupBase
+}
+export type TDataReadGroup = {
+  id: number
+}
+export type TDataUpdateGroup = {
+  id: number
+  requestBody: GroupBase
+}
+export type TDataDeleteGroup = {
+  id: number
+}
+
+export class GroupsService {
+  /**
+   * Read Groups
+   * Retrieve groups.
+   * @returns GroupsPublic Successful Response
+   * @throws ApiError
+   */
+  public static readGroups(): CancelablePromise<GroupsPublic> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/groups/",
+    })
+  }
+
+  /**
+   * Create Group
+   * Create new group.
+   * @returns Group Successful Response
+   * @throws ApiError
+   */
+  public static createGroup(data: TDataCreateGroup): CancelablePromise<Group> {
+    const { requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/groups/",
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Read Group
+   * Get group by ID.
+   * @returns GroupPublic Successful Response
+   * @throws ApiError
+   */
+  public static readGroup(
+    data: TDataReadGroup,
+  ): CancelablePromise<GroupPublic> {
+    const { id } = data
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/groups/{id}",
+      path: {
+        id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Update Group
+   * Update a group.
+   * @returns Group Successful Response
+   * @throws ApiError
+   */
+  public static updateGroup(data: TDataUpdateGroup): CancelablePromise<Group> {
+    const { id, requestBody } = data
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/groups/{id}",
+      path: {
+        id,
+      },
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+
+  /**
+   * Delete Group
+   * Delete a group.
+   * @returns Message Successful Response
+   * @throws ApiError
+   */
+  public static deleteGroup(
+    data: TDataDeleteGroup,
+  ): CancelablePromise<Message> {
+    const { id } = data
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/groups/{id}",
       path: {
         id,
       },
