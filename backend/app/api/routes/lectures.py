@@ -4,17 +4,17 @@ from typing import Any
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select
+from sqlmodel import func, select, column
 
-from app.api.deps import CurrentUser, SessionDep
-from app.models import LectureCreate, LectureUpdate, Lectures, LecturesCreate, Post, Lecture, LecturePublic, LecturesPublic, Message
+from app.api.deps import CurrentUser, CurrentUserOptional, SessionDep
+from app.models import Group, LectureCreate, LectureUpdate, Lectures, LecturesCreate, Post, Lecture, LecturePublic, LecturesPublic, Message
 
 router = APIRouter() 
 
 
 @router.get("/", response_model=LecturesPublic)
 def read_lectures(
-    session: SessionDep, currentUser: CurrentUser | None, skip: int = 0, limit: int = 100
+    session: SessionDep, currentUser: CurrentUserOptional, skip: int = 0, limit: int = 100
 ) -> Any:
     """
     Retrieve lectures.
@@ -34,14 +34,14 @@ def read_lectures(
 
 
 @router.get("/{id}", response_model=LecturePublic)
-def read_lecture(session: SessionDep, currentUser: CurrentUser | None, id: int) -> Any:
+def read_lecture(session: SessionDep, currentUser: CurrentUserOptional, id:int) -> Any:
     """
     Get lecture by ID.
     """
     lecture = session.get(Lecture, id)
     if not lecture or (currentUser == None and not lecture.is_visible):
         raise HTTPException(status_code=404, detail="Lecture not found")
-    return LecturePublic(lecture)
+    return lecture
 
 
 @router.post("/multiple/", response_model=Lectures)
@@ -51,21 +51,26 @@ def create_lectures(
     """
     Creates new lectures with a post.
     """
+    
+    # Get the course group (automatically saves as course)
+    group_id = session.exec(select(column('id')).select_from(Group).where(Group.name == 'Course')).one()
     # Create the post
     post = Post.model_validate(lectures_in.post, update={
+        "group_id": group_id,
         "created_by": current_user.id,
         "created_at": datetime.now(),
         "updated_by": current_user.id,
         "last_updated": datetime.now()
     })
     for lecture_in in lectures_in.lectures:
-        session.add(Lecture.model_validate(lecture_in, update={
+        lecture_in = Lecture.model_validate(lecture_in, update={
             "post": post,
             "created_by": current_user.id,
             "created_at": datetime.now(),
             "updated_by": current_user.id,
             "last_updated": datetime.now()
-        }))
+        })
+        session.add(lecture_in)
     session.commit()
     session.refresh(post)
     statement = select(Lecture).where(Lecture.post_id == post.id)

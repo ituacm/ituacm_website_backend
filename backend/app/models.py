@@ -4,8 +4,6 @@ from datetime import datetime
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
-from app.constants import Group
-
 # Shared properties
 class UserBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
@@ -57,22 +55,38 @@ class UsersPublic(SQLModel):
     count: int
 
 
+class GroupBase(SQLModel):
+    name: str
+    description: str | None = Field(default=None)
+
+class Group(GroupBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    posts: list["Post"] = Relationship(back_populates="group")
+
+class GroupPublic(GroupBase):
+    id: int
+
+class GroupsPublic(SQLModel):
+    groups: list[GroupPublic]
+    count: int = Field(default=0)
+
 class PostBase(SQLModel):
     title: str
     description: str | None = Field(default=None)
     content: str | None = Field(default=None)
     image: str | None = Field(default=None)
     is_visible: bool | None = Field(default=True)
-    group: int | None = Field(default=Group.POST.value)
+    application_link: str | None
 
 class PostCreate(PostBase):
-    pass
+    group_id: int = Field(foreign_key="group.id", default=1)
 
 class PostUpdate(PostBase):
-    pass
+    group_id: int = Field(foreign_key="group.id", default=1)
 
 class PostPublic(PostBase):
     id: int
+    group: Group
     lectures: list["Lecture"] | None
 
 class PostsPublic(SQLModel):
@@ -81,7 +95,9 @@ class PostsPublic(SQLModel):
 
 class Post(PostBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    lectures: list["Lecture"] | None = Relationship(back_populates="post")
+    lectures: list["Lecture"] = Relationship(back_populates="post", cascade_delete=True)
+    group_id: int = Field(foreign_key="group.id", default=1)
+    group: Group = Relationship(back_populates="posts")
     created_at: datetime
     created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
     last_updated: datetime = Field(default_factory=datetime.now)
@@ -118,12 +134,12 @@ class LectureBase(SQLModel):
     end: datetime
     location: str
     is_visible: bool | None = Field(default=True)
-    post_id: int = Field(foreign_key="post.id")
+    post_id: int | None = Field(foreign_key="post.id", default=None)
 
 class Lecture(LectureBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     
-    post: Post = Relationship(back_populates="lectures", cascade_delete=True)
+    post: Post | None = Relationship(back_populates="lectures")
     created_at: datetime = Field(default_factory=datetime.now)
     created_by: uuid.UUID = Field(foreign_key="user.id", nullable=True, ondelete="SET NULL")
     last_updated: datetime = Field(default_factory=datetime.now)
@@ -139,7 +155,7 @@ class LectureCreateBase(SQLModel):
     is_visible: bool | None = Field(default=True)
     
 class LectureCreate(LectureCreateBase):
-    id: int
+    post_id: int
 
 class LecturesCreate(SQLModel):
     lectures: list[LectureCreateBase]
