@@ -10,7 +10,7 @@ from jinja2 import Template
 from jwt.exceptions import InvalidTokenError
 
 from app.core.config import settings
-
+from app.models import ContactForm
 
 @dataclass
 class EmailData:
@@ -58,6 +58,17 @@ def generate_test_email(email_to: str) -> EmailData:
         template_name="test_email.html",
         context={"project_name": settings.PROJECT_NAME, "email": email_to},
     )
+    return EmailData(html_content=html_content, subject=subject)
+
+
+def generate_contact_request_email(contact_form: ContactForm) -> EmailData:
+    subject = f"{settings.PROJECT_NAME} - New Contact Request"
+    
+    html_content = render_email_template(
+        template_name="contact_email.html",
+        context=contact_form.model_dump()
+    )
+    
     return EmailData(html_content=html_content, subject=subject)
 
 

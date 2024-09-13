@@ -1,4 +1,3 @@
-import uuid
 import logging
 from typing import Any
 from datetime import datetime
@@ -7,7 +6,7 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select, update
 
 from app.api.deps import CurrentUser, CurrentUserOptional, SessionDep
-from app.models import Group, Lecture, Post, PostCreate, PostUpdate, PostPublic, PostsPublic, Message
+from app.models import Lecture, Post, PostCreate, PostUpdate, PostPublic, PostsPublic, Message
 
 
 router = APIRouter()

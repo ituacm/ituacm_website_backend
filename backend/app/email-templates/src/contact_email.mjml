@@ -1,0 +1,30 @@
+<mjml>
+  <mj-body background-color="#fafbfc">
+    <mj-section background-color="#fff" padding="40px 20px">
+      <mj-column vertical-align="middle" width="100%">
+        <!-- Subject: New Contact Request -->
+        <mj-text align="center" padding="35px" font-size="20px" font-family="Arial, Helvetica, sans-serif" color="#333">New Contact Request</mj-text>
+        <mj-text align="center" font-size="16px" padding-left="25px" padding-right="25px" font-family="Arial, Helvetica, sans-serif" color="#555">
+          <strong>Contact Form Submission</strong>
+        </mj-text>
+        
+        <!-- Contact Information -->
+        <mj-text font-size="16px" padding="15px 25px" font-family="Arial, Helvetica, sans-serif" color="#333">
+          <strong>ID:</strong> {{ id }}<br/>
+          <strong>Name:</strong> {{ name }}<br/>
+          <strong>Email:</strong> {{ email }}<br/>
+          <strong>Message:</strong><br/> {{ message }}<br/>
+          <strong>Submitted At:</strong> {{ created_at }}
+        </mj-text>
+
+        <!-- Divider -->
+        <mj-divider border-color="#ccc" border-width="2px"></mj-divider>
+
+        <!-- Footer -->
+        <mj-text align="center" font-size="14px" font-family="Arial, Helvetica, sans-serif" color="#999">
+          This is an automated email. Please do not reply.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
