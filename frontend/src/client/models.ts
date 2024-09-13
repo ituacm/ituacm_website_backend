@@ -13,7 +13,7 @@ export type Event = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
-  application_link: string | null
+  application_link?: string | null
   start: string
   end: string
   location: string
@@ -30,7 +30,7 @@ export type EventCreate = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
-  application_link: string | null
+  application_link?: string | null
   start: string
   end: string
   location: string
@@ -42,7 +42,7 @@ export type EventPublic = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
-  application_link: string | null
+  application_link?: string | null
   start: string
   end: string
   location: string
@@ -55,7 +55,7 @@ export type EventUpdate = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
-  application_link: string | null
+  application_link?: string | null
   start: string
   end: string
   location: string
@@ -172,7 +172,7 @@ export type Post = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
-  application_link: string | null
+  application_link?: string | null
   id?: number | null
   group_id?: number
   created_at: string
@@ -187,7 +187,7 @@ export type PostCreate = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
-  application_link: string | null
+  application_link?: string | null
   group_id?: number
 }
 
@@ -197,7 +197,7 @@ export type PostPublic = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
-  application_link: string | null
+  application_link?: string | null
   id: number
   group: Group
   lectures: Array<Lecture> | null
@@ -209,7 +209,7 @@ export type PostUpdate = {
   content?: string | null
   image?: string | null
   is_visible?: boolean | null
-  application_link: string | null
+  application_link?: string | null
   group_id?: number
 }
 

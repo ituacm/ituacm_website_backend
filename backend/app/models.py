@@ -82,7 +82,7 @@ class PostBase(SQLModel):
     content: str | None = Field(default=None)
     image: str | None = Field(default=None)
     is_visible: bool | None = Field(default=True)
-    application_link: str | None
+    application_link: str | None = Field(default=None)
 
 class PostCreate(PostBase):
     group_id: int = Field(foreign_key="group.id", default=1)
@@ -177,6 +177,16 @@ class LecturePublic(LectureBase):
 class LecturesPublic(SQLModel):
     lectures: list[LecturePublic]
     count: int
+
+
+class ContactFormBase(SQLModel):
+    name: str
+    email: str
+    message: str
+    
+class ContactForm(ContactFormBase):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4)
+    created_at: datetime = Field(default_factory=datetime.now)
 
 
 # Generic message

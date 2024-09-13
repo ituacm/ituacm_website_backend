@@ -109,7 +109,6 @@ export const $Event = {
           type: "null",
         },
       ],
-      isRequired: true,
     },
     start: {
       type: "string",
@@ -217,7 +216,6 @@ export const $EventCreate = {
           type: "null",
         },
       ],
-      isRequired: true,
     },
     start: {
       type: "string",
@@ -296,7 +294,6 @@ export const $EventPublic = {
           type: "null",
         },
       ],
-      isRequired: true,
     },
     start: {
       type: "string",
@@ -379,7 +376,6 @@ export const $EventUpdate = {
           type: "null",
         },
       ],
-      isRequired: true,
     },
     start: {
       type: "string",
@@ -888,7 +884,6 @@ export const $Post = {
           type: "null",
         },
       ],
-      isRequired: true,
     },
     id: {
       type: "any-of",
@@ -987,7 +982,6 @@ export const $PostCreate = {
           type: "null",
         },
       ],
-      isRequired: true,
     },
     group_id: {
       type: "number",
@@ -1056,7 +1050,6 @@ export const $PostPublic = {
           type: "null",
         },
       ],
-      isRequired: true,
     },
     id: {
       type: "number",
@@ -1144,7 +1137,6 @@ export const $PostUpdate = {
           type: "null",
         },
       ],
-      isRequired: true,
     },
     group_id: {
       type: "number",
