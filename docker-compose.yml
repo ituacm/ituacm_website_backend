@@ -78,7 +78,7 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=(Host(`api.${DOMAIN?Variable not set}`) || Host(`www.api.${DOMAIN?Variable not set}`)) && (PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`))
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.entrypoints=http
 
-      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.rule=(Host(api.`${DOMAIN?Variable not set}`) || Host(`www.api.${DOMAIN?Variable not set}`)) && (PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`))
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.rule=(Host(`api.${DOMAIN?Variable not set}`) || Host(`www.api.${DOMAIN?Variable not set}`)) && (PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`))
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.entrypoints=https
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.tls=true
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-https.tls.certresolver=le
@@ -101,7 +101,7 @@ services:
     build:
       context: ./frontend
       args:
-        - VITE_API_URL=https://admin.${DOMAIN?Variable not set}
+        - VITE_API_URL=https://api.${DOMAIN?Variable not set}
         - NODE_ENV=production
     labels:
       - traefik.enable=true
