@@ -10,7 +10,7 @@ import {
   InputGroup,
   InputRightElement,
   Link,
-  Text,
+  // Text,
   useBoolean,
 } from "@chakra-ui/react"
 import {

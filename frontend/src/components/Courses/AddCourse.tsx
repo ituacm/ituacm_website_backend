@@ -158,7 +158,7 @@ const AddCourse = ({ isOpen, onClose }: AddCourseProps) => {
                     />
                     {errors.lectures?.[index]?.title && (
                       <FormErrorMessage>
-                        {errors.lectures[index].title?.message}
+                        {errors.lectures?.[index]?.title?.message}
                       </FormErrorMessage>
                     )}
                   </FormControl>
