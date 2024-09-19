@@ -49,6 +49,48 @@ export const $Body_login_login_access_token = {
   },
 } as const
 
+export const $ContactForm = {
+  properties: {
+    name: {
+      type: "string",
+      isRequired: true,
+    },
+    email: {
+      type: "string",
+      isRequired: true,
+    },
+    message: {
+      type: "string",
+      isRequired: true,
+    },
+    id: {
+      type: "string",
+      format: "uuid",
+    },
+    created_at: {
+      type: "string",
+      format: "date-time",
+    },
+  },
+} as const
+
+export const $ContactFormBase = {
+  properties: {
+    name: {
+      type: "string",
+      isRequired: true,
+    },
+    email: {
+      type: "string",
+      isRequired: true,
+    },
+    message: {
+      type: "string",
+      isRequired: true,
+    },
+  },
+} as const
+
 export const $Event = {
   properties: {
     title: {

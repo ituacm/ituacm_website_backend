@@ -34,6 +34,8 @@ import type {
   GroupBase,
   GroupPublic,
   GroupsPublic,
+  ContactForm,
+  ContactFormBase,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -897,6 +899,34 @@ export class GroupsService {
       path: {
         id,
       },
+      errors: {
+        422: `Validation Error`,
+      },
+    })
+  }
+}
+
+export type TDataContact = {
+  requestBody: ContactFormBase
+}
+
+export class ContactService {
+  /**
+   * Contact
+   * Send a mail with the contact request.
+   *
+   * Args:
+   * contact_form_in (ContactFormBase)
+   * @returns ContactForm Successful Response
+   * @throws ApiError
+   */
+  public static contact(data: TDataContact): CancelablePromise<ContactForm> {
+    const { requestBody } = data
+    return __request(OpenAPI, {
+      method: "POST",
+      url: "/api/v1/contact/",
+      body: requestBody,
+      mediaType: "application/json",
       errors: {
         422: `Validation Error`,
       },

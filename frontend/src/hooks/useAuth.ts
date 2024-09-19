@@ -8,7 +8,7 @@ import {
   type ApiError,
   LoginService,
   type UserPublic,
-  type UserRegister,
+  // type UserRegister,
   UsersService,
 } from "../client"
 import useCustomToast from "./useCustomToast"
@@ -28,31 +28,31 @@ const useAuth = () => {
     enabled: isLoggedIn(),
   })
 
-  const signUpMutation = useMutation({
-    mutationFn: (data: UserRegister) =>
-      UsersService.registerUser({ requestBody: data }),
+  // const signUpMutation = useMutation({
+  //   mutationFn: (data: UserRegister) =>
+  //     UsersService.registerUser({ requestBody: data }),
 
-    onSuccess: () => {
-      navigate({ to: "/login" })
-      showToast(
-        "Account created.",
-        "Your account has been created successfully.",
-        "success",
-      )
-    },
-    onError: (err: ApiError) => {
-      let errDetail = (err.body as any)?.detail
+  //   onSuccess: () => {
+  //     navigate({ to: "/login" })
+  //     showToast(
+  //       "Account created.",
+  //       "Your account has been created successfully.",
+  //       "success",
+  //     )
+  //   },
+  //   onError: (err: ApiError) => {
+  //     let errDetail = (err.body as any)?.detail
 
-      if (err instanceof AxiosError) {
-        errDetail = err.message
-      }
+  //     if (err instanceof AxiosError) {
+  //       errDetail = err.message
+  //     }
 
-      showToast("Something went wrong.", errDetail, "error")
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] })
-    },
-  })
+  //     showToast("Something went wrong.", errDetail, "error")
+  //   },
+  //   onSettled: () => {
+  //     queryClient.invalidateQueries({ queryKey: ["users"] })
+  //   },
+  // })
 
   const login = async (data: AccessToken) => {
     const response = await LoginService.loginAccessToken({
@@ -87,7 +87,7 @@ const useAuth = () => {
   }
 
   return {
-    signUpMutation,
+    // signUpMutation,
     loginMutation,
     logout,
     user,

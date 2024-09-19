@@ -7,6 +7,20 @@ export type Body_login_login_access_token = {
   client_secret?: string | null
 }
 
+export type ContactForm = {
+  name: string
+  email: string
+  message: string
+  id?: string
+  created_at?: string
+}
+
+export type ContactFormBase = {
+  name: string
+  email: string
+  message: string
+}
+
 export type Event = {
   title: string
   description?: string | null
