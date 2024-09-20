@@ -125,10 +125,7 @@ const AddCourse = ({ isOpen, onClose }: AddCourseProps) => {
               <FormControl isRequired>
                 <FormLabel>Application Link</FormLabel>
                 <Input
-                  {...register("post.application_link", {
-                    required: "Application link is required",
-                  })}
-                  placeholder="Application Link"
+                  {...register("post.application_link")} placeholder="Application Link"
                 />
                 {errors.post?.application_link && (
                   <FormErrorMessage>
