@@ -15,15 +15,15 @@ docker compose up -d
 
 * Now you can open your browser and interact with these URLs:
 
-Frontend, built with Docker, with routes handled based on the path: http://localhost
+Admin Panel Frontend, built with Docker, with routes handled based on the path: https://admin.ituacm.com
 
-Backend, JSON based web API based on OpenAPI: http://localhost/api/
+Backend, JSON based web API based on OpenAPI: https://api.ituacm.com/api
 
-Automatic interactive documentation with Swagger UI (from the OpenAPI backend): http://localhost/docs
+Automatic interactive documentation with Swagger UI (from the OpenAPI backend): https://api.ituacm.com/docs
 
-Adminer, database web administration: http://localhost:8080
+Adminer, database web administration: https://adminer.ituacm.com
 
-Traefik UI, to see how the routes are being handled by the proxy: http://localhost:8090
+Traefik UI, to see how the routes are being handled by the proxy: https://traefik.ituacm.com
 
 **Note**: The first time you start your stack, it might take a minute for it to be ready. While the backend waits for the database to be ready and configures everything. You can check the logs to monitor it.
 
