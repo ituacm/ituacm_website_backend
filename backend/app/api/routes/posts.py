@@ -14,7 +14,7 @@ router = APIRouter()
 
 @router.get("/", response_model=PostsPublic)
 def read_posts(
-    session: SessionDep, currentUser: CurrentUserOptional, group: int = 1, skip: int = 0, limit: int = 100
+    session: SessionDep, currentUser: CurrentUserOptional, group: int = 2, skip: int = 0, limit: int = 100
 ) -> Any:
     """
     Retrieve posts.
