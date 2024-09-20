@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - run: whoami
       - run: docker compose -f docker-compose.yml build
       - run: cp /home/hasan/ituacm_website_backend/.env /home/hasan/actions-runner/_work/ituacm_website_backend/ituacm_website_backend/
+      - run: cat .env
       - run: docker compose -f docker-compose.yml up -d
