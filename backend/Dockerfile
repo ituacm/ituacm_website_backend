@@ -26,5 +26,3 @@ COPY ./prestart.sh /app/
 COPY ./tests-start.sh /app/
 
 COPY ./app /app/app
-
-COPY ./.env /app/.env
