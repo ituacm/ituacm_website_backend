@@ -27,4 +27,4 @@ COPY ./tests-start.sh /app/
 
 COPY ./app /app/app
 
-RUN echo $BACKEND_CORS_ORIGINS
+COPY ../.env /app/.env
