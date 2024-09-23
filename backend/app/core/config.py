@@ -46,9 +46,6 @@ class Settings(BaseSettings):
         list[AnyUrl] | str, BeforeValidator(parse_cors)
     ] = []
 
-    BACKEND_CORS_ORIGINS.append("http://admin.ituacm.com")
-    BACKEND_CORS_ORIGINS.append("https://admin.ituacm.com")
-
     PROJECT_NAME: str
     SENTRY_DSN: HttpUrl | None = None
     POSTGRES_SERVER: str
