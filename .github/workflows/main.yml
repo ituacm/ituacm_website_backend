@@ -14,5 +14,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - run: cp /home/hasan/ituacm_website_backend/.env ./
-      - run: docker compose -f docker-compose.yml build --no-cache
+      - run: cat .env
+      - run: docker compose -f docker-compose.yml build
       - run: docker compose -f docker-compose.yml up -d
