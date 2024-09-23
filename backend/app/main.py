@@ -19,7 +19,7 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     generate_unique_id_function=custom_generate_unique_id,
 )
-
+print(settings.model_dump_json(indent=2))
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
     settings.BACKEND_CORS_ORIGINS = [
