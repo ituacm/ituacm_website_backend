@@ -22,6 +22,18 @@ app = FastAPI(
 
 # Set all CORS enabled origins
 if settings.BACKEND_CORS_ORIGINS:
+    settings.BACKEND_CORS_ORIGINS = [
+        'http://localhost',
+        'http://localhost:5173',
+        'https://localhost',
+        'https://localhost:5173',
+        'https://ituacm.com',
+        'https://api.ituacm.com',
+        'https://adminer.ituacm.com',
+        'https://admin.ituacm.com',
+        'http://admin.ituacm.com'
+    ]
+    print(settings.BACKEND_CORS_ORIGINS)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
