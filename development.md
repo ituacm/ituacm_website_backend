@@ -1,4 +1,4 @@
-# FastAPI Project - Development
+# Development
 
 ## Development in `localhost` with a custom domain
 
